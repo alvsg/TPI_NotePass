@@ -1,0 +1,11 @@
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\bin\Debug\NotePass.exe.config
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\bin\Debug\NotePass.exe
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\bin\Debug\NotePass.pdb
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.csprojAssemblyReference.cache
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.FrmAuthentification.resources
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.Properties.Resources.resources
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.View.FrmRegistry.resources
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.csproj.GenerateResource.cache
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.csproj.CoreCompileInputs.cache
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.exe
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.pdb

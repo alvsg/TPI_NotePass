@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace NotePass
 {
-    public partial class Form1 : Form
+    public partial class FrmAuthentification : Form
     {
-        public Form1()
+        public FrmAuthentification()
         {
             InitializeComponent();
         }
