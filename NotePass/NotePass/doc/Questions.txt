@@ -1,0 +1,11 @@
+Dans quelle ville êtes-vous né ?
+Quel est votre film favori ?
+Quelle est la marque de votre première voiture ?
+Quelle est votre couleur favorite ?
+Quel est votre jeu vidéo favori ?
+Quelle est la personnalité historique que vous préférez ?
+Quel est votre acteur, musicien ou artiste favori ?
+Quel est le nom et prénom de votre premier amour ?
+Quel est le nom de famille de votre professeur d’enfance préféré ?
+Quel est le prénom de votre arrière-grand-mère maternelle ?
+Qu’est-ce vous vouliez devenir plus grand, lorsque vous étiez enfant ?

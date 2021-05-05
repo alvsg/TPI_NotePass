@@ -9,3 +9,6 @@ C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.csproj
 C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.csproj.CoreCompileInputs.cache
 C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.exe
 C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.pdb
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.View.FrmEntry.resources
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.View.FrmMain.resources
+C:\Users\ALVSGL\Desktop\TPI_NotePass\NotePass\NotePass\obj\Debug\NotePass.View.FrmForgottenPwd.resources

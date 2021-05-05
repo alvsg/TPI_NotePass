@@ -29,13 +29,106 @@ namespace NotePass
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.tbxPassword = new System.Windows.Forms.TextBox();
+            this.btnEnter = new System.Windows.Forms.Button();
+            this.lblForgottenPwd = new System.Windows.Forms.Label();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
+            this.pbxClose = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxClose)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.Font = new System.Drawing.Font("Arial Narrow", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.Location = new System.Drawing.Point(213, 44);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(1);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(165, 60);
+            this.lblTitle.TabIndex = 3;
+            this.lblTitle.Text = "NotePass";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tbxPassword
+            // 
+            this.tbxPassword.Location = new System.Drawing.Point(81, 118);
+            this.tbxPassword.Name = "tbxPassword";
+            this.tbxPassword.Size = new System.Drawing.Size(272, 20);
+            this.tbxPassword.TabIndex = 7;
+            // 
+            // btnEnter
+            // 
+            this.btnEnter.Location = new System.Drawing.Point(359, 116);
+            this.btnEnter.Name = "btnEnter";
+            this.btnEnter.Size = new System.Drawing.Size(75, 23);
+            this.btnEnter.TabIndex = 8;
+            this.btnEnter.Text = "Entrer";
+            this.btnEnter.UseVisualStyleBackColor = true;
+            // 
+            // lblForgottenPwd
+            // 
+            this.lblForgottenPwd.AutoSize = true;
+            this.lblForgottenPwd.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblForgottenPwd.Location = new System.Drawing.Point(188, 141);
+            this.lblForgottenPwd.Name = "lblForgottenPwd";
+            this.lblForgottenPwd.Size = new System.Drawing.Size(125, 16);
+            this.lblForgottenPwd.TabIndex = 9;
+            this.lblForgottenPwd.Text = "Mot de passe oublié";
+            this.lblForgottenPwd.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // pbxLogo
+            // 
+            this.pbxLogo.Image = global::NotePass.Properties.Resources.NotePass_Logo;
+            this.pbxLogo.Location = new System.Drawing.Point(148, 45);
+            this.pbxLogo.Margin = new System.Windows.Forms.Padding(1);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(60, 60);
+            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbxLogo.TabIndex = 2;
+            this.pbxLogo.TabStop = false;
+            // 
+            // pbxClose
+            // 
+            this.pbxClose.Image = global::NotePass.Properties.Resources.fermer;
+            this.pbxClose.Location = new System.Drawing.Point(494, -1);
+            this.pbxClose.Name = "pbxClose";
+            this.pbxClose.Size = new System.Drawing.Size(25, 25);
+            this.pbxClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbxClose.TabIndex = 10;
+            this.pbxClose.TabStop = false;
+            // 
+            // FrmAuthentification
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(519, 197);
+            this.Controls.Add(this.pbxClose);
+            this.Controls.Add(this.lblForgottenPwd);
+            this.Controls.Add(this.btnEnter);
+            this.Controls.Add(this.tbxPassword);
+            this.Controls.Add(this.lblTitle);
+            this.Controls.Add(this.pbxLogo);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "FrmAuthentification";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.FrmAuthentification_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxClose)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.PictureBox pbxLogo;
+        private System.Windows.Forms.TextBox tbxPassword;
+        private System.Windows.Forms.Button btnEnter;
+        private System.Windows.Forms.Label lblForgottenPwd;
+        private System.Windows.Forms.PictureBox pbxClose;
     }
 }
 

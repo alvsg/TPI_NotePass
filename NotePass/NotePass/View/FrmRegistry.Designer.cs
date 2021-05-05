@@ -51,14 +51,17 @@ namespace NotePass.View
             this.tbxQuestion1Answer = new System.Windows.Forms.TextBox();
             this.lblQuestion1Answer = new System.Windows.Forms.Label();
             this.lblQuestion1 = new System.Windows.Forms.Label();
-            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.lblDescription = new System.Windows.Forms.Label();
+            this.lblMessage = new System.Windows.Forms.Label();
+            this.pbxMessage = new System.Windows.Forms.PictureBox();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.gbxPassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxShowPwdConf)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxShowPwd)).BeginInit();
             this.gbxQuestions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxMessage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -234,7 +237,6 @@ namespace NotePass.View
             // 
             // cbxQuestion1
             // 
-            this.cbxQuestion1.FormattingEnabled = true;
             this.cbxQuestion1.Location = new System.Drawing.Point(107, 24);
             this.cbxQuestion1.Name = "cbxQuestion1";
             this.cbxQuestion1.Size = new System.Drawing.Size(329, 22);
@@ -267,22 +269,12 @@ namespace NotePass.View
             this.lblQuestion1.TabIndex = 6;
             this.lblQuestion1.Text = "Question n° 1 :";
             // 
-            // pbxLogo
-            // 
-            this.pbxLogo.Image = global::NotePass.Properties.Resources.crayon;
-            this.pbxLogo.Location = new System.Drawing.Point(12, 12);
-            this.pbxLogo.Name = "pbxLogo";
-            this.pbxLogo.Size = new System.Drawing.Size(60, 60);
-            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbxLogo.TabIndex = 0;
-            this.pbxLogo.TabStop = false;
-            // 
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(13, 401);
+            this.btnCancel.Location = new System.Drawing.Point(12, 400);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(100, 24);
+            this.btnCancel.Size = new System.Drawing.Size(112, 24);
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Annuler";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -290,11 +282,11 @@ namespace NotePass.View
             // btnSave
             // 
             this.btnSave.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.Location = new System.Drawing.Point(362, 401);
+            this.btnSave.Location = new System.Drawing.Point(349, 400);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(100, 24);
+            this.btnSave.Size = new System.Drawing.Size(113, 24);
             this.btnSave.TabIndex = 8;
-            this.btnSave.Text = "Enregistrer";
+            this.btnSave.Text = "Sauvegarder";
             this.btnSave.UseVisualStyleBackColor = true;
             // 
             // lblDescription
@@ -308,29 +300,66 @@ namespace NotePass.View
             this.lblDescription.Text = "Définissez votre mot de passe et vos questions secrêtes ";
             this.lblDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // lblMessage
+            // 
+            this.lblMessage.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.Location = new System.Drawing.Point(48, 427);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(414, 30);
+            this.lblMessage.TabIndex = 6;
+            this.lblMessage.Text = "Message d\'erreur";
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblMessage.Visible = false;
+            // 
+            // pbxMessage
+            // 
+            this.pbxMessage.Image = global::NotePass.Properties.Resources.danger1;
+            this.pbxMessage.Location = new System.Drawing.Point(12, 427);
+            this.pbxMessage.Name = "pbxMessage";
+            this.pbxMessage.Size = new System.Drawing.Size(30, 30);
+            this.pbxMessage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbxMessage.TabIndex = 7;
+            this.pbxMessage.TabStop = false;
+            this.pbxMessage.Visible = false;
+            // 
+            // pbxLogo
+            // 
+            this.pbxLogo.Image = global::NotePass.Properties.Resources.crayon;
+            this.pbxLogo.Location = new System.Drawing.Point(12, 12);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(60, 60);
+            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbxLogo.TabIndex = 0;
+            this.pbxLogo.TabStop = false;
+            // 
             // FrmRegistry
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 436);
+            this.ClientSize = new System.Drawing.Size(474, 462);
+            this.Controls.Add(this.pbxMessage);
             this.Controls.Add(this.lblDescription);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.gbxQuestions);
+            this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.gbxPassword);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.pbxLogo);
             this.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FrmRegistry";
             this.Text = "Formulaire de création ";
+            this.Load += new System.EventHandler(this.FrmRegistry_Load);
             this.gbxPassword.ResumeLayout(false);
             this.gbxPassword.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxShowPwdConf)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxShowPwd)).EndInit();
             this.gbxQuestions.ResumeLayout(false);
             this.gbxQuestions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxMessage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -364,5 +393,7 @@ namespace NotePass.View
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label lblDescription;
+        private System.Windows.Forms.PictureBox pbxMessage;
+        private System.Windows.Forms.Label lblMessage;
     }
 }
