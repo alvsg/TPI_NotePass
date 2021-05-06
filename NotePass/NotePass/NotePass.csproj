@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="Model\Safe.cs" />
     <Compile Include="Model\Security.cs" />
+    <Compile Include="Model\UserInput.cs" />
     <Compile Include="Model\XmlFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

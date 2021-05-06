@@ -12,7 +12,7 @@ namespace NotePass.View
 {
     public partial class FrmMain : Form
     {
-        public FrmMain()
+        public FrmMain(string password)
         {
             InitializeComponent();
         }

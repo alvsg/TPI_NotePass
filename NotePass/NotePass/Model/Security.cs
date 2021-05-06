@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO; //Directive ajouté manuellement
-using System.Linq;
 using System.Runtime.InteropServices; //Directive ajouté manuellement
 using System.Security.Cryptography; //Directive ajouté manuellement
 using System.Text;
@@ -24,16 +23,16 @@ namespace NotePass.Model
 
         static byte[] salt;
         private string _error;
-        XmlFile xmlFile;
+        private XmlFile xmlFile;
 
         public string Error { get => _error; set => _error = value; }
 
         /// <summary>
         /// Constructeur principal de la classe Securtiy
         /// </summary>
-        public Security()
+        public Security(XmlFile file)
         {
-            xmlFile = new XmlFile();
+            xmlFile = file;
             salt = GenerateRandomSalt();
         }
 
@@ -211,6 +210,37 @@ namespace NotePass.Model
                     }
                 }
             }
+        }
+        // M.Shcmidan question sur generation de mot de passe
+        //https://stackoverflow.com/questions/108819/best-way-to-randomize-an-array-with-net
+        public string GenerateRandomPwd()
+        {
+            string characters = "abcdefghijklmnopqrstuvwxyz";
+            string capCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string numbers = "0123456789";
+            string specialChar = "~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/";
+            Random rnd = new Random();
+            string GeneratePwd = "";
+            for (int i = 0; i < 11; i++)
+            {
+                if(i == 0)
+                {
+                    GeneratePwd += capCharacters[rnd.Next(0, capCharacters.Length)];
+                }
+                else if (i % 2 == 0)
+                {
+                    GeneratePwd += characters[rnd.Next(0, characters.Length)];
+                }
+                else if (i % 3 == 0)
+                {
+                    GeneratePwd += specialChar[rnd.Next(0, specialChar.Length)];
+                }
+                else if (i % i == 0)
+                {
+                    GeneratePwd += numbers[rnd.Next(0, numbers.Length)];
+                }
+            }
+            return GeneratePwd;
         }
     }
 }

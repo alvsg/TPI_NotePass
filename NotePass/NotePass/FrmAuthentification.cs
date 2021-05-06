@@ -19,7 +19,7 @@ namespace NotePass
 {
     public partial class FrmAuthentification : Form
     {
-        Model.XmlFile xmlFile;
+        private Model.XmlFile xmlFile;
 
         public FrmAuthentification()
         {

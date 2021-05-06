@@ -32,6 +32,7 @@ namespace NotePass.View
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRegistry));
             this.lblTitle = new System.Windows.Forms.Label();
             this.gbxPassword = new System.Windows.Forms.GroupBox();
+            this.cbxRandomPwd = new System.Windows.Forms.CheckBox();
             this.pbxShowPwdConf = new System.Windows.Forms.PictureBox();
             this.pbxShowPwd = new System.Windows.Forms.PictureBox();
             this.tbxPasswordConf = new System.Windows.Forms.TextBox();
@@ -77,6 +78,7 @@ namespace NotePass.View
             // 
             // gbxPassword
             // 
+            this.gbxPassword.Controls.Add(this.cbxRandomPwd);
             this.gbxPassword.Controls.Add(this.pbxShowPwdConf);
             this.gbxPassword.Controls.Add(this.pbxShowPwd);
             this.gbxPassword.Controls.Add(this.tbxPasswordConf);
@@ -86,9 +88,21 @@ namespace NotePass.View
             this.gbxPassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gbxPassword.Location = new System.Drawing.Point(12, 87);
             this.gbxPassword.Name = "gbxPassword";
-            this.gbxPassword.Size = new System.Drawing.Size(450, 103);
+            this.gbxPassword.Size = new System.Drawing.Size(450, 119);
             this.gbxPassword.TabIndex = 2;
             this.gbxPassword.TabStop = false;
+            // 
+            // cbxRandomPwd
+            // 
+            this.cbxRandomPwd.AutoSize = true;
+            this.cbxRandomPwd.Font = new System.Drawing.Font("Arial", 9.75F);
+            this.cbxRandomPwd.Location = new System.Drawing.Point(204, 87);
+            this.cbxRandomPwd.Name = "cbxRandomPwd";
+            this.cbxRandomPwd.Size = new System.Drawing.Size(227, 20);
+            this.cbxRandomPwd.TabIndex = 6;
+            this.cbxRandomPwd.Text = "Générer un mot de passe aléatoire";
+            this.cbxRandomPwd.UseVisualStyleBackColor = true;
+            this.cbxRandomPwd.CheckedChanged += new System.EventHandler(this.cbxRandomPwd_CheckedChanged);
             // 
             // pbxShowPwdConf
             // 
@@ -99,16 +113,18 @@ namespace NotePass.View
             this.pbxShowPwdConf.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbxShowPwdConf.TabIndex = 5;
             this.pbxShowPwdConf.TabStop = false;
+            this.pbxShowPwdConf.Click += new System.EventHandler(this.IsPasswordVisible);
             // 
             // pbxShowPwd
             // 
-            this.pbxShowPwd.Image = global::NotePass.Properties.Resources.visibe;
+            this.pbxShowPwd.Image = global::NotePass.Properties.Resources.invisible;
             this.pbxShowPwd.Location = new System.Drawing.Point(416, 28);
             this.pbxShowPwd.Name = "pbxShowPwd";
             this.pbxShowPwd.Size = new System.Drawing.Size(20, 20);
             this.pbxShowPwd.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbxShowPwd.TabIndex = 4;
             this.pbxShowPwd.TabStop = false;
+            this.pbxShowPwd.Click += new System.EventHandler(this.IsPasswordVisible);
             // 
             // tbxPasswordConf
             // 
@@ -116,6 +132,7 @@ namespace NotePass.View
             this.tbxPasswordConf.Name = "tbxPasswordConf";
             this.tbxPasswordConf.Size = new System.Drawing.Size(206, 20);
             this.tbxPasswordConf.TabIndex = 3;
+            this.tbxPasswordConf.TextChanged += new System.EventHandler(this.VerifyIfNotEmpty);
             // 
             // lblPasswordConf
             // 
@@ -133,6 +150,7 @@ namespace NotePass.View
             this.tbxPassowrd.Name = "tbxPassowrd";
             this.tbxPassowrd.Size = new System.Drawing.Size(206, 20);
             this.tbxPassowrd.TabIndex = 1;
+            this.tbxPassowrd.TextChanged += new System.EventHandler(this.VerifyIfNotEmpty);
             // 
             // lblPassword
             // 
@@ -159,7 +177,7 @@ namespace NotePass.View
             this.gbxQuestions.Controls.Add(this.lblQuestion1Answer);
             this.gbxQuestions.Controls.Add(this.lblQuestion1);
             this.gbxQuestions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gbxQuestions.Location = new System.Drawing.Point(12, 196);
+            this.gbxQuestions.Location = new System.Drawing.Point(12, 212);
             this.gbxQuestions.Name = "gbxQuestions";
             this.gbxQuestions.Size = new System.Drawing.Size(450, 198);
             this.gbxQuestions.TabIndex = 6;
@@ -172,6 +190,7 @@ namespace NotePass.View
             this.cbxQuestion3.Name = "cbxQuestion3";
             this.cbxQuestion3.Size = new System.Drawing.Size(330, 22);
             this.cbxQuestion3.TabIndex = 16;
+            this.cbxQuestion3.SelectedIndexChanged += new System.EventHandler(this.AllCbxQuestion_SelectedIndexChanged);
             // 
             // tbxQuestion3Answer
             // 
@@ -179,6 +198,7 @@ namespace NotePass.View
             this.tbxQuestion3Answer.Name = "tbxQuestion3Answer";
             this.tbxQuestion3Answer.Size = new System.Drawing.Size(330, 20);
             this.tbxQuestion3Answer.TabIndex = 13;
+            this.tbxQuestion3Answer.TextChanged += new System.EventHandler(this.VerifyIfNotEmpty);
             // 
             // lblQuestion3Answer
             // 
@@ -207,6 +227,7 @@ namespace NotePass.View
             this.cbxQuestion2.Name = "cbxQuestion2";
             this.cbxQuestion2.Size = new System.Drawing.Size(329, 22);
             this.cbxQuestion2.TabIndex = 12;
+            this.cbxQuestion2.SelectedIndexChanged += new System.EventHandler(this.AllCbxQuestion_SelectedIndexChanged);
             // 
             // tbxQuestion2Answer
             // 
@@ -214,6 +235,7 @@ namespace NotePass.View
             this.tbxQuestion2Answer.Name = "tbxQuestion2Answer";
             this.tbxQuestion2Answer.Size = new System.Drawing.Size(329, 20);
             this.tbxQuestion2Answer.TabIndex = 9;
+            this.tbxQuestion2Answer.TextChanged += new System.EventHandler(this.VerifyIfNotEmpty);
             // 
             // lblQuestion2Answer
             // 
@@ -241,6 +263,7 @@ namespace NotePass.View
             this.cbxQuestion1.Name = "cbxQuestion1";
             this.cbxQuestion1.Size = new System.Drawing.Size(329, 22);
             this.cbxQuestion1.TabIndex = 8;
+            this.cbxQuestion1.SelectedIndexChanged += new System.EventHandler(this.AllCbxQuestion_SelectedIndexChanged);
             // 
             // tbxQuestion1Answer
             // 
@@ -248,6 +271,7 @@ namespace NotePass.View
             this.tbxQuestion1Answer.Name = "tbxQuestion1Answer";
             this.tbxQuestion1Answer.Size = new System.Drawing.Size(329, 20);
             this.tbxQuestion1Answer.TabIndex = 6;
+            this.tbxQuestion1Answer.TextChanged += new System.EventHandler(this.VerifyIfNotEmpty);
             // 
             // lblQuestion1Answer
             // 
@@ -272,7 +296,7 @@ namespace NotePass.View
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(12, 400);
+            this.btnCancel.Location = new System.Drawing.Point(12, 416);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(112, 24);
             this.btnCancel.TabIndex = 7;
@@ -282,12 +306,13 @@ namespace NotePass.View
             // btnSave
             // 
             this.btnSave.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.Location = new System.Drawing.Point(349, 400);
+            this.btnSave.Location = new System.Drawing.Point(349, 416);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(113, 24);
             this.btnSave.TabIndex = 8;
             this.btnSave.Text = "Sauvegarder";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // lblDescription
             // 
@@ -302,8 +327,8 @@ namespace NotePass.View
             // 
             // lblMessage
             // 
-            this.lblMessage.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMessage.Location = new System.Drawing.Point(48, 427);
+            this.lblMessage.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.Location = new System.Drawing.Point(48, 443);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(414, 30);
             this.lblMessage.TabIndex = 6;
@@ -314,7 +339,7 @@ namespace NotePass.View
             // pbxMessage
             // 
             this.pbxMessage.Image = global::NotePass.Properties.Resources.danger1;
-            this.pbxMessage.Location = new System.Drawing.Point(12, 427);
+            this.pbxMessage.Location = new System.Drawing.Point(12, 443);
             this.pbxMessage.Name = "pbxMessage";
             this.pbxMessage.Size = new System.Drawing.Size(30, 30);
             this.pbxMessage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -336,7 +361,7 @@ namespace NotePass.View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 462);
+            this.ClientSize = new System.Drawing.Size(474, 483);
             this.Controls.Add(this.pbxMessage);
             this.Controls.Add(this.lblDescription);
             this.Controls.Add(this.btnSave);
@@ -395,5 +420,6 @@ namespace NotePass.View
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.PictureBox pbxMessage;
         private System.Windows.Forms.Label lblMessage;
+        private System.Windows.Forms.CheckBox cbxRandomPwd;
     }
 }

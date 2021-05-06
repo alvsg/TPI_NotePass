@@ -17,6 +17,7 @@ namespace NotePass.Model
     class XmlFile
     {
         private string _usernameWindows, _dirPath, _fileXml, _filePath;
+        private Security secure;
 
         public string UsernameWindows { get => _usernameWindows; }
         public string DirPath { get => _dirPath; }
@@ -36,6 +37,7 @@ namespace NotePass.Model
             _fileXml = "datafile.xml";
             _dirPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + "/data/";
             _filePath = _dirPath + _fileXml;
+            secure = new Security(this);
         }
 
         /// <summary>
@@ -79,10 +81,11 @@ namespace NotePass.Model
         /// Méthode qui permet de crée le fichier xml
         /// https://stackoverflow.com/questions/4721735/how-to-save-this-string-into-xml-file/4721762
         /// </summary>
-        private void CreateXmlFile()
+        public void CreateXmlFile(string password)
         {
             string textInFile = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + Environment.NewLine + "<data>" + Environment.NewLine + "</data>";
             File.WriteAllText(_filePath, textInFile);
+            secure.ActionOnFile(true, password, "");
         }
 
         /// <summary>
