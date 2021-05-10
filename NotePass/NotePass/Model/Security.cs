@@ -12,6 +12,7 @@ using System.Runtime.InteropServices; //Directive ajouté manuellement
 using System.Security.Cryptography; //Directive ajouté manuellement
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms; //Directive ajouté manuellement
 
 namespace NotePass.Model
 {
@@ -95,14 +96,13 @@ namespace NotePass.Model
         }
 
         /// <summary>
-        /// Méthode qu permet de chiffrer un fichier
-        /// https://ourcodeworld.com/articles/read/471/how-to-encrypt-and-decrypt-files-using-the-aes-encryption-algorithm-in-c-sharp
+        /// Méthode qu permet de chiffrer un fichier (https://ourcodeworld.com/articles/read/471/how-to-encrypt-and-decrypt-files-using-the-aes-encryption-algorithm-in-c-sharp)
         /// </summary>
         /// <param name="inputFile"> Le chemin du fichier à chiffrer </param>
         /// <param name="password"> Le mot de passe de l'utilisateur </param>
         private void FileEncrypt(string inputFile, string password)
         {
-            // http://stackoverflow.com/questions/27645527/aes-encryption-on-large-files
+            // (http://stackoverflow.com/questions/27645527/aes-encryption-on-large-files)
 
             using (FileStream fsCrypt = new FileStream(inputFile + ".aes", FileMode.Create))
             {
@@ -116,13 +116,12 @@ namespace NotePass.Model
                 AES.BlockSize = 128;
                 AES.Padding = PaddingMode.PKCS7;
 
-                // http://stackoverflow.com/questions/2659214/why-do-i-need-to-use-the-rfc2898derivebytes-class-in-net-instead-of-directly
-                // Hash à plusieurs reprises le mot de passe de l'utilisateur avec le sel. Nombre d'itérations élevé.
+                // Hash à plusieurs reprises le mot de passe de l'utilisateur avec le sel. Nombre d'itérations élevé (http://stackoverflow.com/questions/2659214/why-do-i-need-to-use-the-rfc2898derivebytes-class-in-net-instead-of-directly)
                 var key = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
                 AES.Key = key.GetBytes(AES.KeySize / 8);
                 AES.IV = key.GetBytes(AES.BlockSize / 8);
 
-                // Cipher modes: http://security.stackexchange.com/questions/52665/which-is-the-best-cipher-mode-and-padding-mode-for-aes-encryption
+                // Cipher modes (http://security.stackexchange.com/questions/52665/which-is-the-best-cipher-mode-and-padding-mode-for-aes-encryption)
                 AES.Mode = CipherMode.CFB;
 
                 // Ecrit le sel au début du fichier
@@ -175,13 +174,12 @@ namespace NotePass.Model
                 AES.BlockSize = 128;
                 AES.Padding = PaddingMode.PKCS7;
 
-                // http://stackoverflow.com/questions/2659214/why-do-i-need-to-use-the-rfc2898derivebytes-class-in-net-instead-of-directly
-                // Hash à plusieurs reprises le mot de passe de l'utilisateur avec le sel. Nombre d'itérations élevé.
+                // Hash à plusieurs reprises le mot de passe de l'utilisateur avec le sel. Nombre d'itérations élevé (http://stackoverflow.com/questions/2659214/why-do-i-need-to-use-the-rfc2898derivebytes-class-in-net-instead-of-directly)
                 var key = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
                 AES.Key = key.GetBytes(AES.KeySize / 8);
                 AES.IV = key.GetBytes(AES.BlockSize / 8);
 
-                // Cipher modes: http://security.stackexchange.com/questions/52665/which-is-the-best-cipher-mode-and-padding-mode-for-aes-encryption
+                // Cipher modes (http://security.stackexchange.com/questions/52665/which-is-the-best-cipher-mode-and-padding-mode-for-aes-encryption)
                 AES.Mode = CipherMode.CFB;
 
                 CryptoStream cs = new CryptoStream(fsCrypt, AES.CreateDecryptor(), CryptoStreamMode.Read);
@@ -211,23 +209,21 @@ namespace NotePass.Model
                 }
             }
         }
-        // M.Shcmidan question sur generation de mot de passe
-        //https://stackoverflow.com/questions/108819/best-way-to-randomize-an-array-with-net
+
+        /// <summary>
+        /// Méthode qui permet de générer un mot de passe aléatoirement
+        /// </summary>
+        /// <returns>LE mot de passe généré</returns>
         public string GenerateRandomPwd()
         {
-            string characters = "abcdefghijklmnopqrstuvwxyz";
-            string capCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string characters = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ";
             string numbers = "0123456789";
             string specialChar = "~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/";
             Random rnd = new Random();
             string GeneratePwd = "";
             for (int i = 0; i < 11; i++)
             {
-                if(i == 0)
-                {
-                    GeneratePwd += capCharacters[rnd.Next(0, capCharacters.Length)];
-                }
-                else if (i % 2 == 0)
+                if (i % 2 == 0)
                 {
                     GeneratePwd += characters[rnd.Next(0, characters.Length)];
                 }
@@ -240,7 +236,28 @@ namespace NotePass.Model
                     GeneratePwd += numbers[rnd.Next(0, numbers.Length)];
                 }
             }
-            return GeneratePwd;
+            return Shuffle(GeneratePwd);
+        }
+
+        /// <summary>
+        /// Méthode qui permet de mélanger l'emplacement des caractères dans un texte (https://stackoverflow.com/questions/4739903/shuffle-string-c-sharp)
+        /// </summary>
+        /// <param name="password"> </param>
+        /// <returns>Le mot de passe généré aléatoirement mélangé</returns>
+        private string Shuffle(string password)
+        {
+            char[] arrayChar = password.ToCharArray();
+            Random position = new Random();
+            int stringLenght = arrayChar.Length;
+            while (stringLenght > 1)
+            {
+                stringLenght--;
+                int newPosition = position.Next(stringLenght + 1);
+                var value = arrayChar[newPosition];
+                arrayChar[newPosition] = arrayChar[stringLenght];
+                arrayChar[stringLenght] = value;
+            }
+            return new string(arrayChar);
         }
     }
 }

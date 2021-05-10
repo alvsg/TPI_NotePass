@@ -52,6 +52,7 @@
     <Compile Include="FrmAuthentification.Designer.cs">
       <DependentUpon>FrmAuthentification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Entry.cs" />
     <Compile Include="Model\Safe.cs" />
     <Compile Include="Model\Security.cs" />
     <Compile Include="Model\UserInput.cs" />

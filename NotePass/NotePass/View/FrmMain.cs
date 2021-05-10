@@ -12,9 +12,22 @@ namespace NotePass.View
 {
     public partial class FrmMain : Form
     {
+        private string key;
+        private Model.Security secure;
+        private Model.XmlFile xmlFile;
+
         public FrmMain(string password)
         {
             InitializeComponent();
+            key = password;
+            xmlFile = new Model.XmlFile();
+            secure = new Model.Security(xmlFile);
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+
+            secure.ActionOnFile(true, key, "");
         }
     }
 }

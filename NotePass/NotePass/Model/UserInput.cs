@@ -13,22 +13,32 @@ namespace NotePass.Model
         private List<string> lstQuestions;
         private List<ComboBox> lstComboBox;
         private List<string> lstSelectedQuestions;
+        private const int MAX_ATTEMPTS = 2;
+        private int noAttemptsLeft = 2;
 
-        public UserInput(ComboBox cbxQuestions1, ComboBox cbxQuestions2, ComboBox cbxQuestions3)
+        public UserInput(ComboBox cbxQuestions1, ComboBox cbxQuestions2, ComboBox cbxQuestions3) : this()
         {
-            lstQuestions = new List<string>();
-            lstQuestions = File.ReadLines(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\doc\Questions.txt").ToList();
-
             lstComboBox = new List<ComboBox>();
             lstComboBox.Add(cbxQuestions1);
             lstComboBox.Add(cbxQuestions2);
             lstComboBox.Add(cbxQuestions3);
 
             lstSelectedQuestions = new List<string>();
-            GenerateTheChoiceOfQuestions();
+            GenerateTheChoiceOfQuestionsForLstComboBox();
         }
 
-        private void GenerateTheChoiceOfQuestions()
+        public UserInput(ComboBox cbxQuestions4) : this()
+        {
+            GenerateTheChoiceOfQuestionsForOneComboBox(cbxQuestions4);
+        }
+
+        public UserInput()
+        {
+            lstQuestions = new List<string>();
+            lstQuestions = File.ReadLines(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\doc\Questions.txt").ToList();
+        }
+
+        private void GenerateTheChoiceOfQuestionsForLstComboBox()
         {
             foreach (ComboBox comboBox in lstComboBox)
             {
@@ -39,14 +49,22 @@ namespace NotePass.Model
             }
         }
 
+        private void GenerateTheChoiceOfQuestionsForOneComboBox(ComboBox comboBox)
+        {
+            for (int noQuestion = 0; noQuestion < lstQuestions.Count; noQuestion++)
+            {
+                comboBox.Items.Add(lstQuestions[noQuestion]);
+            }
+        }
+
         public bool IsAlreadySelected(string question)
         {
             bool selected = false;
-            if(lstSelectedQuestions.Count != 0)
+            if (lstSelectedQuestions.Count != 0)
             {
-                foreach(string selectedQuestion in lstSelectedQuestions)
+                foreach (string selectedQuestion in lstSelectedQuestions)
                 {
-                    if(question != selectedQuestion)
+                    if (question != selectedQuestion)
                     {
                         int index = lstSelectedQuestions.IndexOf(selectedQuestion);
                         lstSelectedQuestions[index] = question;
@@ -64,6 +82,33 @@ namespace NotePass.Model
                 lstSelectedQuestions.Add(question);
             }
             return selected;
+        }
+
+        public void IsNotAttemptingAnymore(int attempt, Label lblMessage, TextBox tbxPassword, bool isAuthentification)
+        {
+            if (!IsStillAttempting(attempt, lblMessage))
+            {
+                tbxPassword.Enabled = false;
+                tbxPassword.Text = string.Empty;
+                if (isAuthentification)
+                {
+                    lblMessage.Text = "Vous n'avez plus de tentatives, veuillez séléctionner un autre moyen de connexion !";
+                }
+                else
+                {
+                    lblMessage.Text = "Vous n'avez plus de tentatives !";
+                }
+            }
+        }
+
+        private bool IsStillAttempting(int attempt, Label lblMessage)
+        {
+            if (attempt > MAX_ATTEMPTS)
+            {
+                return false;
+            }
+            lblMessage.Text = "Le mot de passe est incorrect ! Il vous reste " + (noAttemptsLeft--).ToString() + " tentatives.";
+            return true;
         }
     }
 }

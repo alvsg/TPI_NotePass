@@ -376,6 +376,7 @@ namespace NotePass.View
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FrmRegistry";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Formulaire de création ";
             this.Load += new System.EventHandler(this.FrmRegistry_Load);
             this.gbxPassword.ResumeLayout(false);

@@ -39,12 +39,16 @@ namespace NotePass.View
             this.tbxReply = new System.Windows.Forms.TextBox();
             this.gbxForgottenPwd = new System.Windows.Forms.GroupBox();
             this.cbxQuestion = new System.Windows.Forms.ComboBox();
+            this.pbxMessage = new System.Windows.Forms.PictureBox();
+            this.lblMessage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.gbxForgottenPwd.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxMessage)).BeginInit();
             this.SuspendLayout();
             // 
             // btnAdd
             // 
+            this.btnAdd.Enabled = false;
             this.btnAdd.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.Location = new System.Drawing.Point(412, 186);
             this.btnAdd.Name = "btnAdd";
@@ -52,6 +56,7 @@ namespace NotePass.View
             this.btnAdd.TabIndex = 18;
             this.btnAdd.Text = "Ajouter";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnCancel
             // 
@@ -116,10 +121,12 @@ namespace NotePass.View
             // 
             // tbxReply
             // 
+            this.tbxReply.Enabled = false;
             this.tbxReply.Location = new System.Drawing.Point(119, 52);
             this.tbxReply.Name = "tbxReply";
             this.tbxReply.Size = new System.Drawing.Size(340, 20);
             this.tbxReply.TabIndex = 7;
+            this.tbxReply.TextChanged += new System.EventHandler(this.tbxReply_TextChanged);
             // 
             // gbxForgottenPwd
             // 
@@ -141,12 +148,37 @@ namespace NotePass.View
             this.cbxQuestion.Name = "cbxQuestion";
             this.cbxQuestion.Size = new System.Drawing.Size(339, 21);
             this.cbxQuestion.TabIndex = 8;
+            this.cbxQuestion.SelectedIndexChanged += new System.EventHandler(this.cbxQuestion_SelectedIndexChanged);
+            // 
+            // pbxMessage
+            // 
+            this.pbxMessage.Image = global::NotePass.Properties.Resources.danger1;
+            this.pbxMessage.Location = new System.Drawing.Point(13, 216);
+            this.pbxMessage.Name = "pbxMessage";
+            this.pbxMessage.Size = new System.Drawing.Size(30, 30);
+            this.pbxMessage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbxMessage.TabIndex = 20;
+            this.pbxMessage.TabStop = false;
+            this.pbxMessage.Visible = false;
+            // 
+            // lblMessage
+            // 
+            this.lblMessage.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.Location = new System.Drawing.Point(49, 216);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(476, 30);
+            this.lblMessage.TabIndex = 19;
+            this.lblMessage.Text = "Message d\'erreur";
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblMessage.Visible = false;
             // 
             // FrmForgottenPwd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(540, 225);
+            this.ClientSize = new System.Drawing.Size(540, 256);
+            this.Controls.Add(this.pbxMessage);
+            this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblDescription);
@@ -154,10 +186,12 @@ namespace NotePass.View
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.pbxLogo);
             this.Name = "FrmForgottenPwd";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmForgottenPwd";
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.gbxForgottenPwd.ResumeLayout(false);
             this.gbxForgottenPwd.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxMessage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -175,5 +209,7 @@ namespace NotePass.View
         private System.Windows.Forms.TextBox tbxReply;
         private System.Windows.Forms.GroupBox gbxForgottenPwd;
         private System.Windows.Forms.ComboBox cbxQuestion;
+        private System.Windows.Forms.PictureBox pbxMessage;
+        private System.Windows.Forms.Label lblMessage;
     }
 }

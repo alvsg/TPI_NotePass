@@ -12,6 +12,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions; //Directive ajouté manuellement
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -23,8 +24,13 @@ namespace NotePass.View
         private Model.Security secure;
         private Model.UserInput userInput;
         private bool visiblePwd, visiblePwdConf;
+        private bool forgottenPwd;
 
-        public FrmRegistry()
+        /// <summary>
+        /// Constructeur principal de la classe FrmRegistry
+        /// </summary>
+        /// <param name="isForgottenPwd">La booléen qui définit si le constructeur est appelé parce que l'tulisateur a oublié son mot de passe ou non</param>
+        public FrmRegistry(bool isForgottenPwd)
         {
             InitializeComponent();
 
@@ -36,21 +42,42 @@ namespace NotePass.View
             visiblePwdConf = false;
             tbxPassowrd.PasswordChar = '*';
             tbxPasswordConf.PasswordChar = '*';
+            forgottenPwd = isForgottenPwd;
         }
 
+        /// <summary>
+        /// Méthode qui permet de générer les questions pour les comboBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FrmRegistry_Load(object sender, EventArgs e)
         {
-            SetNoCharInTextBox(gbxQuestions);
+            // Boucle qui vérifie si la classe FrmRegistry est appelé depuis la classe FrmForgottenPwd ou pas
+            if (forgottenPwd)
+            {
+                gbxQuestions.Enabled = false;
+            }
+            else
+            {
+                SetNoCharInTextBox(gbxQuestions);
+            }
         }
 
+        /// <summary>
+        /// Méthode qui permet de remplis les champs dû mot de passe avec un mot de passe généré aléatoirement
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbxRandomPwd_CheckedChanged(object sender, EventArgs e)
         {
+            // Boucle qui vérifie si la case de la génération aléaoire du mot de passe est cochée
             if (cbxRandomPwd.Checked)
             {
                 string pwd = secure.GenerateRandomPwd();
-                foreach(Control control in gbxPassword.Controls)
+                foreach (Control control in gbxPassword.Controls)
                 {
-                    if(control is TextBox)
+                    // Boucle qui vérifie si le contrôleur est un champ texte
+                    if (control is TextBox)
                     {
                         TextBox textBox = control as TextBox;
                         textBox.Text = pwd;
@@ -59,9 +86,16 @@ namespace NotePass.View
             }
         }
 
+        /// <summary>
+        /// Méthode qui permet de vérifier si une question a déjà été séléctionné par l'utilisateur
+        ///     Si oui, le champ de la réponse lié à la question devient inactif
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AllCbxQuestion_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox comboBox = sender as ComboBox;
+            // Boucle qui vérifie si la question est déjà séléctionnée dans une autre liste déroulante
             if (userInput.IsAlreadySelected(comboBox.SelectedItem.ToString()))
             {
                 IsWritable(false, comboBox);
@@ -73,6 +107,11 @@ namespace NotePass.View
             IsMyBtnSaveEnabled();
         }
 
+        /// <summary>
+        /// Méthode qui détermine si le champ de réponse lié à la question est actif ou non
+        /// </summary>
+        /// <param name="state">L'état du champ</param>
+        /// <param name="comboBox">La liste déroulante</param>
         private void IsWritable(bool state, ComboBox comboBox)
         {
             switch (comboBox.Name)
@@ -89,18 +128,28 @@ namespace NotePass.View
             }
         }
 
+        /// <summary>
+        /// Méthode qui permet de définir la taille maximum des champs de textes
+        /// </summary>
+        /// <param name="groupBox">Le conteneur des contrôleurs</param>
         private void SetNoCharInTextBox(GroupBox groupBox)
         {
             foreach (Control control in groupBox.Controls)
             {
+                // Boucle qui vérifie si le contrôleur est un champ texte
                 if (control is TextBox)
                 {
                     TextBox textBox = control as TextBox;
-                    textBox.MaxLength = 55;
+                    textBox.MaxLength = 60;
                 }
             }
         }
 
+        /// <summary>
+        /// Méthode qui permet de définir si le mot de passe est visible en clair ou non
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void IsPasswordVisible(object sender, EventArgs e)
         {
             PictureBox pictureBox = sender as PictureBox;
@@ -117,8 +166,15 @@ namespace NotePass.View
             }
         }
 
+        /// <summary>
+        /// Méthode qui va afficher ou masqueer le mot de passe
+        /// </summary>
+        /// <param name="clicked">Définit l'état de l'icon</param>
+        /// <param name="textBox">Le champ du mot de passe</param>
+        /// <param name="pictureBox">L'icon qui illustre l'état d'affichage du mot de passe</param>
         private void MakeVisibleOrNot(bool clicked, TextBox textBox, PictureBox pictureBox)
         {
+            // Boucle qui vérifie si l'icon a déjà été cliqué
             if (clicked)
             {
                 pictureBox.Image = Properties.Resources.visibe;
@@ -131,24 +187,40 @@ namespace NotePass.View
             }
         }
 
+        /// <summary>
+        /// Méthode qui définit le statut du boutons à chaque fois que le texte dans un champs change
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void VerifyIfNotEmpty(object sender, EventArgs e)
         {
             IsMyBtnSaveEnabled();
         }
 
+        /// <summary>
+        /// Méthode qui permet d'enregistrer ce que l'utilisateur a entrée et de le rediriger sur la page principal
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if(tbxPassowrd.Text == tbxPasswordConf.Text)
+            // Boucle qui vérifie que les deux champs du mot de passe sont identique
+            if (tbxPassowrd.Text == tbxPasswordConf.Text)
             {
-                xmlFile.CreateXmlFile(tbxPassowrd.Text);
+                xmlFile.CreateXmlFile(tbxPassowrd.Text, cbxQuestion1.SelectedIndex, cbxQuestion2.SelectedIndex, cbxQuestion3.SelectedIndex, tbxQuestion1Answer.Text, tbxQuestion2Answer.Text, tbxQuestion3Answer.Text);
                 CloseThis();
             }
             else
             {
-                
+                lblMessage.Text = "Les deux mots de passes ne sont pas identique !";
+                pbxMessage.Visible = true;
+                lblMessage.Visible = true;
             }
         }
 
+        /// <summary>
+        /// Méthode qui permet a la fenêtre de création de se fermet et d'afficher la fenêtre principal
+        /// </summary>
         private void CloseThis()
         {
             this.Hide();
@@ -157,33 +229,81 @@ namespace NotePass.View
             this.Close();
         }
 
+        /// <summary>
+        /// Méthode qui permet de vérifier l'état du bouton selon l'état des contrôleurs
+        /// </summary>
         private void IsMyBtnSaveEnabled()
         {
-            if(IsMyTextBoxOrMyComboBoxEmpty(gbxPassword) && IsMyTextBoxOrMyComboBoxEmpty(gbxQuestions))
+            // Boucle qui vérifie si la classe FrmRegistry est appelé depuis la classe FrmForgottenPwd ou pas
+            if (!forgottenPwd)
             {
-                btnSave.Enabled = true;
+                // Boucle qui vérifie que les champs dans chaque conteneur ne sont pas vide
+                if (IsMyTextBoxOrMyComboBoxEmptyOrImproper(gbxPassword) && IsMyTextBoxOrMyComboBoxEmptyOrImproper(gbxQuestions))
+                {
+                    btnSave.Enabled = true;
+                }
+                else
+                {
+                    btnSave.Enabled = false;
+                }
             }
             else
             {
-                btnSave.Enabled = false;
+                // Boucle qui vérifie que les champs dans un conteneur ne sont pas vide
+                if (!IsMyTextBoxOrMyComboBoxEmptyOrImproper(gbxPassword))
+                {
+                    btnSave.Enabled = true;
+                }
+                else
+                {
+                    btnSave.Enabled = false;
+                }
             }
         }
 
-        private bool IsMyTextBoxOrMyComboBoxEmpty(GroupBox groupBox)
+        /// <summary>
+        /// Méthode qui permet de vérifier l'état des contrôleurs
+        /// </summary>
+        /// <param name="groupBox">Le conteneur des contrôleurs</param>
+        /// <returns></returns>
+        private bool IsMyTextBoxOrMyComboBoxEmptyOrImproper(GroupBox groupBox)
         {
             foreach (Control control in groupBox.Controls)
             {
+                // Boucle qui vérifie que le contrôleur soit un champs texte et actif
                 if (control is TextBox && control.Enabled)
                 {
                     TextBox textBox = control as TextBox;
+                    // Boucle qui vérifie que le contenu du champs texte soit correct ou non vide
                     if (string.IsNullOrWhiteSpace(textBox.Text))
                     {
                         return false;
                     }
+                    else
+                    {
+                        if (textBox.Name.Contains("tbxPassowrd"))
+                        {
+                            if (!IsThePasswordOk(textBox))
+                            {
+                                lblMessage.Text = "Votre mot de passe n'est pas conforme !";
+                                lblMessage.Visible = true;
+                                pbxMessage.Visible = true;
+
+                                return false;
+                            }
+                            else
+                            {
+                                lblMessage.Visible = false;
+                                pbxMessage.Visible = false;
+                            }
+                        }
+                    }
                 }
+                // Boucle qui vérifie que le contrôleur soit une liste déroulante
                 else if (control is ComboBox)
                 {
                     ComboBox comboBox = control as ComboBox;
+                    // Boucle qui vérifie si une question a été séléctionné dans la liste déroulante
                     if (comboBox.SelectedIndex < 0)
                     {
                         return false;
@@ -191,6 +311,21 @@ namespace NotePass.View
                 }
             }
             return true;
+        }
+
+        private bool IsThePasswordOk(TextBox textBox)
+        {
+            if(textBox.Text.Length > 9)
+            {
+                string isThereCapitalLetters = string.Concat(Regex.Matches(textBox.Text, "[A-Z]").OfType<Match>().Select(match => match.Value));
+                string isThereNumbers = string.Concat(Regex.Matches(textBox.Text, "[0-9]").OfType<Match>().Select(match => match.Value));
+                string isThereSpecialChars = string.Concat(Regex.Matches(textBox.Text, "[^A-Za-z0-9]").OfType<Match>().Select(match => match.Value));
+                if(isThereCapitalLetters.Length > 0 && isThereNumbers.Length > 0 && isThereSpecialChars.Length > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

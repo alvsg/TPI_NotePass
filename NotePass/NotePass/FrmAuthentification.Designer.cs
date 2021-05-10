@@ -35,8 +35,11 @@ namespace NotePass
             this.lblForgottenPwd = new System.Windows.Forms.Label();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.pbxClose = new System.Windows.Forms.PictureBox();
+            this.pbxMessage = new System.Windows.Forms.PictureBox();
+            this.lblMessage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxClose)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxMessage)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -56,15 +59,18 @@ namespace NotePass
             this.tbxPassword.Name = "tbxPassword";
             this.tbxPassword.Size = new System.Drawing.Size(272, 20);
             this.tbxPassword.TabIndex = 7;
+            this.tbxPassword.TextChanged += new System.EventHandler(this.tbxPassword_TextChanged);
             // 
             // btnEnter
             // 
+            this.btnEnter.Enabled = false;
             this.btnEnter.Location = new System.Drawing.Point(359, 116);
             this.btnEnter.Name = "btnEnter";
             this.btnEnter.Size = new System.Drawing.Size(75, 23);
             this.btnEnter.TabIndex = 8;
             this.btnEnter.Text = "Entrer";
             this.btnEnter.UseVisualStyleBackColor = true;
+            this.btnEnter.Click += new System.EventHandler(this.btnEnter_Click);
             // 
             // lblForgottenPwd
             // 
@@ -76,6 +82,7 @@ namespace NotePass
             this.lblForgottenPwd.TabIndex = 9;
             this.lblForgottenPwd.Text = "Mot de passe oublié";
             this.lblForgottenPwd.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblForgottenPwd.Click += new System.EventHandler(this.lblForgottenPwd_Click);
             // 
             // pbxLogo
             // 
@@ -97,12 +104,37 @@ namespace NotePass
             this.pbxClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbxClose.TabIndex = 10;
             this.pbxClose.TabStop = false;
+            this.pbxClose.Click += new System.EventHandler(this.pbxClose_Click);
+            // 
+            // pbxMessage
+            // 
+            this.pbxMessage.Image = global::NotePass.Properties.Resources.danger1;
+            this.pbxMessage.Location = new System.Drawing.Point(12, 158);
+            this.pbxMessage.Name = "pbxMessage";
+            this.pbxMessage.Size = new System.Drawing.Size(30, 30);
+            this.pbxMessage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbxMessage.TabIndex = 12;
+            this.pbxMessage.TabStop = false;
+            this.pbxMessage.Visible = false;
+            // 
+            // lblMessage
+            // 
+            this.lblMessage.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.Location = new System.Drawing.Point(48, 157);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(459, 30);
+            this.lblMessage.TabIndex = 11;
+            this.lblMessage.Text = "Message d\'erreur";
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblMessage.Visible = false;
             // 
             // FrmAuthentification
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(519, 197);
+            this.Controls.Add(this.pbxMessage);
+            this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.pbxClose);
             this.Controls.Add(this.lblForgottenPwd);
             this.Controls.Add(this.btnEnter);
@@ -116,6 +148,7 @@ namespace NotePass
             this.Load += new System.EventHandler(this.FrmAuthentification_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxClose)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxMessage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -129,6 +162,8 @@ namespace NotePass
         private System.Windows.Forms.Button btnEnter;
         private System.Windows.Forms.Label lblForgottenPwd;
         private System.Windows.Forms.PictureBox pbxClose;
+        private System.Windows.Forms.PictureBox pbxMessage;
+        private System.Windows.Forms.Label lblMessage;
     }
 }
 

@@ -186,20 +186,20 @@ namespace NotePass.View
             this.tsmiNew.Image = global::NotePass.Properties.Resources.ajouter_entree;
             this.tsmiNew.Name = "tsmiNew";
             this.tsmiNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.tsmiNew.Size = new System.Drawing.Size(180, 22);
+            this.tsmiNew.Size = new System.Drawing.Size(165, 22);
             this.tsmiNew.Text = "&Nouveau";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(162, 6);
             // 
             // tsmiExit
             // 
             this.tsmiExit.Image = global::NotePass.Properties.Resources.fermer;
             this.tsmiExit.Name = "tsmiExit";
             this.tsmiExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.tsmiExit.Size = new System.Drawing.Size(180, 22);
+            this.tsmiExit.Size = new System.Drawing.Size(165, 22);
             this.tsmiExit.Text = "&Quitter";
             // 
             // tsmiModify
@@ -216,21 +216,21 @@ namespace NotePass.View
             // 
             this.tsmiCopy.Name = "tsmiCopy";
             this.tsmiCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.tsmiCopy.Size = new System.Drawing.Size(180, 22);
+            this.tsmiCopy.Size = new System.Drawing.Size(154, 22);
             this.tsmiCopy.Text = "Copier";
             // 
             // tsmiCut
             // 
             this.tsmiCut.Name = "tsmiCut";
             this.tsmiCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.tsmiCut.Size = new System.Drawing.Size(180, 22);
+            this.tsmiCut.Size = new System.Drawing.Size(154, 22);
             this.tsmiCut.Text = "Couper";
             // 
             // tsmiPaste
             // 
             this.tsmiPaste.Name = "tsmiPaste";
             this.tsmiPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.tsmiPaste.Size = new System.Drawing.Size(180, 22);
+            this.tsmiPaste.Size = new System.Drawing.Size(154, 22);
             this.tsmiPaste.Text = "Coller";
             // 
             // tsmiOrganize
@@ -246,7 +246,7 @@ namespace NotePass.View
             // 
             this.tsmiAlphabeticalOrder.Image = global::NotePass.Properties.Resources.ordre_aphabetique;
             this.tsmiAlphabeticalOrder.Name = "tsmiAlphabeticalOrder";
-            this.tsmiAlphabeticalOrder.Size = new System.Drawing.Size(180, 22);
+            this.tsmiAlphabeticalOrder.Size = new System.Drawing.Size(176, 22);
             this.tsmiAlphabeticalOrder.Text = "Ordre a&lphabétique";
             // 
             // tsmiDateAdded
@@ -256,21 +256,21 @@ namespace NotePass.View
             this.tsmiDesc});
             this.tsmiDateAdded.Image = global::NotePass.Properties.Resources.date;
             this.tsmiDateAdded.Name = "tsmiDateAdded";
-            this.tsmiDateAdded.Size = new System.Drawing.Size(180, 22);
+            this.tsmiDateAdded.Size = new System.Drawing.Size(176, 22);
             this.tsmiDateAdded.Text = "&Date d\'ajout";
             // 
             // tsmiAsc
             // 
             this.tsmiAsc.Image = global::NotePass.Properties.Resources.date_croissant;
             this.tsmiAsc.Name = "tsmiAsc";
-            this.tsmiAsc.Size = new System.Drawing.Size(180, 22);
+            this.tsmiAsc.Size = new System.Drawing.Size(167, 22);
             this.tsmiAsc.Text = "Ordre &croissant";
             // 
             // tsmiDesc
             // 
             this.tsmiDesc.Image = global::NotePass.Properties.Resources.date_decroissant;
             this.tsmiDesc.Name = "tsmiDesc";
-            this.tsmiDesc.Size = new System.Drawing.Size(180, 22);
+            this.tsmiDesc.Size = new System.Drawing.Size(167, 22);
             this.tsmiDesc.Text = "Ordre décroi&ssant";
             // 
             // aideToolStripMenuItem
@@ -289,6 +289,7 @@ namespace NotePass.View
             this.Controls.Add(this.nsFrmMain);
             this.Name = "FrmMain";
             this.Text = "FrmMain";
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.nsFrmMain.ResumeLayout(false);
