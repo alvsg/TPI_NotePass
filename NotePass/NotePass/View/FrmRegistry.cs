@@ -12,7 +12,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions; //Directive ajouté manuellement
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -70,20 +69,7 @@ namespace NotePass.View
         /// <param name="e"></param>
         private void cbxRandomPwd_CheckedChanged(object sender, EventArgs e)
         {
-            // Boucle qui vérifie si la case de la génération aléaoire du mot de passe est cochée
-            if (cbxRandomPwd.Checked)
-            {
-                string pwd = secure.GenerateRandomPwd();
-                foreach (Control control in gbxPassword.Controls)
-                {
-                    // Boucle qui vérifie si le contrôleur est un champ texte
-                    if (control is TextBox)
-                    {
-                        TextBox textBox = control as TextBox;
-                        textBox.Text = pwd;
-                    }
-                }
-            }
+            secure.GenerateRandomPwdInTextBox(cbxRandomPwd, gbxPassword);
         }
 
         /// <summary>
@@ -96,7 +82,7 @@ namespace NotePass.View
         {
             ComboBox comboBox = sender as ComboBox;
             // Boucle qui vérifie si la question est déjà séléctionnée dans une autre liste déroulante
-            if (userInput.IsAlreadySelected(comboBox.SelectedItem.ToString()))
+            if (userInput.IsAlreadySelected(comboBox.SelectedIndex))
             {
                 IsWritable(false, comboBox);
             }
@@ -157,33 +143,12 @@ namespace NotePass.View
             {
                 case "pbxShowPwd":
                     visiblePwd = !visiblePwd;
-                    MakeVisibleOrNot(visiblePwd, tbxPassowrd, pictureBox);
+                    userInput.MakeVisibleOrNot(visiblePwd, tbxPassowrd, pictureBox);
                     break;
                 case "pbxShowPwdConf":
                     visiblePwdConf = !visiblePwdConf;
-                    MakeVisibleOrNot(visiblePwdConf, tbxPasswordConf, pictureBox);
+                    userInput.MakeVisibleOrNot(visiblePwdConf, tbxPasswordConf, pictureBox);
                     break;
-            }
-        }
-
-        /// <summary>
-        /// Méthode qui va afficher ou masqueer le mot de passe
-        /// </summary>
-        /// <param name="clicked">Définit l'état de l'icon</param>
-        /// <param name="textBox">Le champ du mot de passe</param>
-        /// <param name="pictureBox">L'icon qui illustre l'état d'affichage du mot de passe</param>
-        private void MakeVisibleOrNot(bool clicked, TextBox textBox, PictureBox pictureBox)
-        {
-            // Boucle qui vérifie si l'icon a déjà été cliqué
-            if (clicked)
-            {
-                pictureBox.Image = Properties.Resources.visibe;
-                textBox.PasswordChar = '\0';
-            }
-            else
-            {
-                pictureBox.Image = Properties.Resources.invisible;
-                textBox.PasswordChar = '*';
             }
         }
 
@@ -207,7 +172,8 @@ namespace NotePass.View
             // Boucle qui vérifie que les deux champs du mot de passe sont identique
             if (tbxPassowrd.Text == tbxPasswordConf.Text)
             {
-                xmlFile.CreateXmlFile(tbxPassowrd.Text, cbxQuestion1.SelectedIndex, cbxQuestion2.SelectedIndex, cbxQuestion3.SelectedIndex, tbxQuestion1Answer.Text, tbxQuestion2Answer.Text, tbxQuestion3Answer.Text);
+                xmlFile.CreateDataXmlFile(0, "NotePass", tbxPasswordConf.Text, "", "", false);
+                xmlFile.CreateForgottenPwdXmlFile(cbxQuestion1.SelectedIndex, cbxQuestion2.SelectedIndex, cbxQuestion3.SelectedIndex, tbxPasswordConf.Text, tbxQuestion1Answer.Text, tbxQuestion2Answer.Text, tbxQuestion3Answer.Text);
                 CloseThis();
             }
             else
@@ -283,7 +249,7 @@ namespace NotePass.View
                     {
                         if (textBox.Name.Contains("tbxPassowrd"))
                         {
-                            if (!IsThePasswordOk(textBox))
+                            if (!userInput.IsThePasswordOk(textBox.Text))
                             {
                                 lblMessage.Text = "Votre mot de passe n'est pas conforme !";
                                 lblMessage.Visible = true;
@@ -311,21 +277,6 @@ namespace NotePass.View
                 }
             }
             return true;
-        }
-
-        private bool IsThePasswordOk(TextBox textBox)
-        {
-            if(textBox.Text.Length > 9)
-            {
-                string isThereCapitalLetters = string.Concat(Regex.Matches(textBox.Text, "[A-Z]").OfType<Match>().Select(match => match.Value));
-                string isThereNumbers = string.Concat(Regex.Matches(textBox.Text, "[0-9]").OfType<Match>().Select(match => match.Value));
-                string isThereSpecialChars = string.Concat(Regex.Matches(textBox.Text, "[^A-Za-z0-9]").OfType<Match>().Select(match => match.Value));
-                if(isThereCapitalLetters.Length > 0 && isThereNumbers.Length > 0 && isThereSpecialChars.Length > 0)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

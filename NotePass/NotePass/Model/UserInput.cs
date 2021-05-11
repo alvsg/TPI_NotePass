@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO; //Directive ajouté manuellement
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions; //Directive ajouté manuellement
 using System.Threading.Tasks;
 using System.Windows.Forms; //Directive ajouté manuellement
 
@@ -12,9 +13,10 @@ namespace NotePass.Model
     {
         private List<string> lstQuestions;
         private List<ComboBox> lstComboBox;
-        private List<string> lstSelectedQuestions;
+        private List<int> lstSelectedQuestions;
         private const int MAX_ATTEMPTS = 2;
         private int noAttemptsLeft = 2;
+        private XmlFile xmlFile;
 
         public UserInput(ComboBox cbxQuestions1, ComboBox cbxQuestions2, ComboBox cbxQuestions3) : this()
         {
@@ -23,13 +25,15 @@ namespace NotePass.Model
             lstComboBox.Add(cbxQuestions2);
             lstComboBox.Add(cbxQuestions3);
 
-            lstSelectedQuestions = new List<string>();
+            lstSelectedQuestions = new List<int>();
             GenerateTheChoiceOfQuestionsForLstComboBox();
         }
 
         public UserInput(ComboBox cbxQuestions4) : this()
         {
-            GenerateTheChoiceOfQuestionsForOneComboBox(cbxQuestions4);
+            xmlFile = new XmlFile();
+            lstSelectedQuestions = xmlFile.GetIndexQuestions();
+            GenerateQuestionFromIndex(cbxQuestions4);
         }
 
         public UserInput()
@@ -49,20 +53,20 @@ namespace NotePass.Model
             }
         }
 
-        private void GenerateTheChoiceOfQuestionsForOneComboBox(ComboBox comboBox)
+        private void GenerateQuestionFromIndex(ComboBox comboBox)
         {
-            for (int noQuestion = 0; noQuestion < lstQuestions.Count; noQuestion++)
+            foreach(int index in lstSelectedQuestions)
             {
-                comboBox.Items.Add(lstQuestions[noQuestion]);
+                comboBox.Items.Add(lstQuestions[index]);
             }
         }
 
-        public bool IsAlreadySelected(string question)
+        public bool IsAlreadySelected(int question)
         {
             bool selected = false;
             if (lstSelectedQuestions.Count != 0)
             {
-                foreach (string selectedQuestion in lstSelectedQuestions)
+                foreach (int selectedQuestion in lstSelectedQuestions)
                 {
                     if (question != selectedQuestion)
                     {
@@ -109,6 +113,42 @@ namespace NotePass.Model
             }
             lblMessage.Text = "Le mot de passe est incorrect ! Il vous reste " + (noAttemptsLeft--).ToString() + " tentatives.";
             return true;
+        }
+
+        /// <summary>
+        /// Méthode qui va afficher ou masqueer le mot de passe
+        /// </summary>
+        /// <param name="clicked">Définit l'état de l'icon</param>
+        /// <param name="textBox">Le champ du mot de passe</param>
+        /// <param name="pictureBox">L'icon qui illustre l'état d'affichage du mot de passe</param>
+        public void MakeVisibleOrNot(bool clicked, TextBox textBox, PictureBox pictureBox)
+        {
+            // Boucle qui vérifie si l'icon a déjà été cliqué
+            if (clicked)
+            {
+                pictureBox.Image = Properties.Resources.visibe;
+                textBox.PasswordChar = '\0';
+            }
+            else
+            {
+                pictureBox.Image = Properties.Resources.invisible;
+                textBox.PasswordChar = '*';
+            }
+        }
+
+        public bool IsThePasswordOk(string password)
+        {
+            if (password.Length > 9)
+            {
+                string isThereCapitalLetters = string.Concat(Regex.Matches(password, "[A-Z]").OfType<Match>().Select(match => match.Value));
+                string isThereNumbers = string.Concat(Regex.Matches(password, "[0-9]").OfType<Match>().Select(match => match.Value));
+                string isThereSpecialChars = string.Concat(Regex.Matches(password, "[^A-Za-z0-9]").OfType<Match>().Select(match => match.Value));
+                if (isThereCapitalLetters.Length > 0 && isThereNumbers.Length > 0 && isThereSpecialChars.Length > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

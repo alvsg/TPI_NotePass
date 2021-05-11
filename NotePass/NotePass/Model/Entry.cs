@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NotePass.Model
 {
-    class Entry
+    public class Entry
     {
         private string _name, _url, _password, _username, _favorites, _firstAnswer, _secondAnswer, _thirdAwnser;
         private DateTime _date;

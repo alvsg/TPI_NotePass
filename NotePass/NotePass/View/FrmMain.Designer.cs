@@ -29,15 +29,6 @@ namespace NotePass.View
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.lblInfo = new System.Windows.Forms.Label();
-            this.btnExit = new System.Windows.Forms.Button();
-            this.btnFavorites = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.btnHome = new System.Windows.Forms.Button();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.pbxLogo = new System.Windows.Forms.PictureBox();
-            this.flpEntry = new System.Windows.Forms.FlowLayoutPanel();
             this.nsFrmMain = new System.Windows.Forms.MenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,110 +44,19 @@ namespace NotePass.View
             this.tsmiAsc = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDesc = new System.Windows.Forms.ToolStripMenuItem();
             this.aideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.btnHome = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnFavorites = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnVersion = new System.Windows.Forms.Button();
+            this.flpEntry = new System.Windows.Forms.FlowLayoutPanel();
             this.nsFrmMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.lblInfo);
-            this.panel1.Controls.Add(this.btnExit);
-            this.panel1.Controls.Add(this.btnFavorites);
-            this.panel1.Controls.Add(this.btnAdd);
-            this.panel1.Controls.Add(this.btnHome);
-            this.panel1.Controls.Add(this.lblTitle);
-            this.panel1.Controls.Add(this.pbxLogo);
-            this.panel1.Location = new System.Drawing.Point(0, 28);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(295, 962);
-            this.panel1.TabIndex = 1;
-            // 
-            // lblInfo
-            // 
-            this.lblInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblInfo.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInfo.Location = new System.Drawing.Point(1, 854);
-            this.lblInfo.Margin = new System.Windows.Forms.Padding(1);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(293, 26);
-            this.lblInfo.TabIndex = 10;
-            this.lblInfo.Text = "03.05.2021 v.1";
-            this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btnExit
-            // 
-            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExit.Location = new System.Drawing.Point(1, 881);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(294, 81);
-            this.btnExit.TabIndex = 9;
-            this.btnExit.Text = "Quitter";
-            this.btnExit.UseVisualStyleBackColor = true;
-            // 
-            // btnFavorites
-            // 
-            this.btnFavorites.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFavorites.Location = new System.Drawing.Point(1, 117);
-            this.btnFavorites.Margin = new System.Windows.Forms.Padding(0);
-            this.btnFavorites.Name = "btnFavorites";
-            this.btnFavorites.Size = new System.Drawing.Size(294, 53);
-            this.btnFavorites.TabIndex = 8;
-            this.btnFavorites.Text = "Favoris";
-            this.btnFavorites.UseVisualStyleBackColor = true;
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAdd.Location = new System.Drawing.Point(242, 63);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(0);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(53, 53);
-            this.btnAdd.TabIndex = 7;
-            this.btnAdd.Text = "+";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            // 
-            // btnHome
-            // 
-            this.btnHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHome.Location = new System.Drawing.Point(1, 63);
-            this.btnHome.Margin = new System.Windows.Forms.Padding(1);
-            this.btnHome.Name = "btnHome";
-            this.btnHome.Size = new System.Drawing.Size(241, 53);
-            this.btnHome.TabIndex = 6;
-            this.btnHome.Text = "Accueil";
-            this.btnHome.UseVisualStyleBackColor = true;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.Font = new System.Drawing.Font("Arial Narrow", 24.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(63, 1);
-            this.lblTitle.Margin = new System.Windows.Forms.Padding(1);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(137, 60);
-            this.lblTitle.TabIndex = 5;
-            this.lblTitle.Text = "NotePass";
-            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // pbxLogo
-            // 
-            this.pbxLogo.Image = global::NotePass.Properties.Resources.NotePass_Logo;
-            this.pbxLogo.Location = new System.Drawing.Point(1, 1);
-            this.pbxLogo.Margin = new System.Windows.Forms.Padding(1);
-            this.pbxLogo.Name = "pbxLogo";
-            this.pbxLogo.Size = new System.Drawing.Size(60, 60);
-            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbxLogo.TabIndex = 4;
-            this.pbxLogo.TabStop = false;
-            // 
-            // flpEntry
-            // 
-            this.flpEntry.Location = new System.Drawing.Point(298, 28);
-            this.flpEntry.Margin = new System.Windows.Forms.Padding(5);
-            this.flpEntry.Name = "flpEntry";
-            this.flpEntry.Size = new System.Drawing.Size(764, 962);
-            this.flpEntry.TabIndex = 2;
             // 
             // nsFrmMain
             // 
@@ -279,36 +179,133 @@ namespace NotePass.View
             this.aideToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.aideToolStripMenuItem.Text = "&Aide";
             // 
+            // pbxLogo
+            // 
+            this.pbxLogo.Image = global::NotePass.Properties.Resources.NotePass_Logo;
+            this.pbxLogo.Location = new System.Drawing.Point(6, 12);
+            this.pbxLogo.Margin = new System.Windows.Forms.Padding(1);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(60, 60);
+            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbxLogo.TabIndex = 4;
+            this.pbxLogo.TabStop = false;
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.Font = new System.Drawing.Font("Arial Narrow", 24.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.Location = new System.Drawing.Point(68, 12);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(1);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(137, 60);
+            this.lblTitle.TabIndex = 5;
+            this.lblTitle.Text = "NotePass";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // btnHome
+            // 
+            this.btnHome.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHome.Location = new System.Drawing.Point(6, 73);
+            this.btnHome.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHome.Name = "btnHome";
+            this.btnHome.Size = new System.Drawing.Size(226, 54);
+            this.btnHome.TabIndex = 6;
+            this.btnHome.Text = "Accueil";
+            this.btnHome.UseVisualStyleBackColor = true;
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAdd.Location = new System.Drawing.Point(232, 74);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(0);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(53, 53);
+            this.btnAdd.TabIndex = 7;
+            this.btnAdd.Text = "+";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            // 
+            // btnFavorites
+            // 
+            this.btnFavorites.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnFavorites.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFavorites.Location = new System.Drawing.Point(7, 127);
+            this.btnFavorites.Margin = new System.Windows.Forms.Padding(0);
+            this.btnFavorites.Name = "btnFavorites";
+            this.btnFavorites.Size = new System.Drawing.Size(279, 53);
+            this.btnFavorites.TabIndex = 8;
+            this.btnFavorites.Text = "Favoris";
+            this.btnFavorites.UseVisualStyleBackColor = true;
+            // 
+            // btnExit
+            // 
+            this.btnExit.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExit.Location = new System.Drawing.Point(6, 894);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(280, 83);
+            this.btnExit.TabIndex = 9;
+            this.btnExit.Text = "Quitter";
+            this.btnExit.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.btnVersion);
+            this.panel1.Controls.Add(this.btnExit);
+            this.panel1.Controls.Add(this.btnFavorites);
+            this.panel1.Controls.Add(this.btnAdd);
+            this.panel1.Controls.Add(this.btnHome);
+            this.panel1.Controls.Add(this.lblTitle);
+            this.panel1.Controls.Add(this.pbxLogo);
+            this.panel1.Location = new System.Drawing.Point(-7, 12);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(287, 984);
+            this.panel1.TabIndex = 1;
+            // 
+            // btnVersion
+            // 
+            this.btnVersion.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnVersion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVersion.Location = new System.Drawing.Point(7, 858);
+            this.btnVersion.Margin = new System.Windows.Forms.Padding(0);
+            this.btnVersion.Name = "btnVersion";
+            this.btnVersion.Size = new System.Drawing.Size(279, 36);
+            this.btnVersion.TabIndex = 10;
+            this.btnVersion.Text = "03.05.2020 v.0.0.0";
+            this.btnVersion.UseVisualStyleBackColor = true;
+            // 
+            // flpEntry
+            // 
+            this.flpEntry.Location = new System.Drawing.Point(284, 25);
+            this.flpEntry.Margin = new System.Windows.Forms.Padding(5);
+            this.flpEntry.Name = "flpEntry";
+            this.flpEntry.Size = new System.Drawing.Size(778, 965);
+            this.flpEntry.TabIndex = 2;
+            this.flpEntry.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.flpEntry_ControlAdded);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1062, 991);
             this.Controls.Add(this.flpEntry);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.nsFrmMain);
+            this.Controls.Add(this.panel1);
             this.Name = "FrmMain";
             this.Text = "FrmMain";
             this.Load += new System.EventHandler(this.FrmMain_Load);
-            this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.nsFrmMain.ResumeLayout(false);
             this.nsFrmMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnHome;
-        private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.PictureBox pbxLogo;
-        private System.Windows.Forms.Label lblInfo;
-        private System.Windows.Forms.Button btnExit;
-        private System.Windows.Forms.Button btnFavorites;
-        private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.FlowLayoutPanel flpEntry;
         private System.Windows.Forms.MenuStrip nsFrmMain;
         private System.Windows.Forms.ToolStripMenuItem tsmiFile;
         private System.Windows.Forms.ToolStripMenuItem tsmiNew;
@@ -324,5 +321,14 @@ namespace NotePass.View
         private System.Windows.Forms.ToolStripMenuItem tsmiAsc;
         private System.Windows.Forms.ToolStripMenuItem tsmiDesc;
         private System.Windows.Forms.ToolStripMenuItem aideToolStripMenuItem;
+        private System.Windows.Forms.PictureBox pbxLogo;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Button btnHome;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnFavorites;
+        private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.FlowLayoutPanel flpEntry;
+        private System.Windows.Forms.Button btnVersion;
     }
 }

@@ -25,16 +25,23 @@ namespace NotePass.Model
         static byte[] salt;
         private string _error;
         private XmlFile xmlFile;
+        private string _stringEncryptPwd;
 
         public string Error { get => _error; set => _error = value; }
+        public string StringEncryptPwd { get => _stringEncryptPwd; }
 
         /// <summary>
         /// Constructeur principal de la classe Securtiy
         /// </summary>
-        public Security(XmlFile file)
+        public Security(XmlFile file) : this()
         {
             xmlFile = file;
+        }
+
+        public Security()
+        {
             salt = GenerateRandomSalt();
+            _stringEncryptPwd = "xv9$tv&Ak9hpX6wMwTnZPKn?NFzhBr";
         }
 
         /// <summary>
@@ -62,7 +69,7 @@ namespace NotePass.Model
         /// <param name="encrypt">Indique que le fichier doit être chiffrer ou non</param>
         /// <param name="password">Le mot de passe utilisateur</param>
         /// <param name="inProgress">L'action en cours</param>
-        public void ActionOnFile(bool encrypt, string password, string inProgress)
+        public void ActionOnFile(bool encrypt, string password, string inProgress, string filePath)
         {
             // Epingle le mot de passe
             GCHandle gch = GCHandle.Alloc(password, GCHandleType.Pinned);
@@ -70,20 +77,20 @@ namespace NotePass.Model
             // Boucle qui vérifie si le fichier doit être chiffré ou déchiffré
             if (encrypt)
             {
-                FileEncrypt(xmlFile.FilePath, password);
-                xmlFile.IfCopyExist(xmlFile.FilePath);
+                FileEncrypt(filePath, password);
+                xmlFile.IfCopyExist(filePath);
             }
             else
             {
-                string filePathAES = xmlFile.FilePath + ".aes";
-                FileDecrypt(filePathAES, xmlFile.FilePath, password);
+                string filePathAES = filePath + ".aes";
+                FileDecrypt(filePathAES, filePath, password);
                 if (_error == null)
                 {
                     xmlFile.IfCopyExist(filePathAES);
                 }
                 else
                 {
-                    xmlFile.IfCopyExist(xmlFile.FilePath);
+                    xmlFile.IfCopyExist(filePath);
                 }
             }
 
@@ -214,7 +221,7 @@ namespace NotePass.Model
         /// Méthode qui permet de générer un mot de passe aléatoirement
         /// </summary>
         /// <returns>LE mot de passe généré</returns>
-        public string GenerateRandomPwd()
+        private string GenerateRandomPwd()
         {
             string characters = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ";
             string numbers = "0123456789";
@@ -258,6 +265,110 @@ namespace NotePass.Model
                 arrayChar[stringLenght] = value;
             }
             return new string(arrayChar);
+        }
+
+        public string ActionOnString(bool encrypt, string text, string key)
+        {
+            // Boucle qui vérifie si le texte doit être chiffré ou déchiffré
+            if (encrypt)
+            {
+                return EncryptString(text, key);
+            }
+            else
+            {
+                return DecryptString(text, key);
+            }
+        }
+
+        // http://curlybrackets.com/posts/43017/how-to-encrypt-and-decrypt-a-string-in-c-sharp (for both)
+        private string EncryptString(string text, string key)
+        {
+            using (var md5 = new MD5CryptoServiceProvider())
+            {
+                using (var tdes = new TripleDESCryptoServiceProvider())
+                {
+                    tdes.Key = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
+                    tdes.Mode = CipherMode.ECB;
+                    tdes.Padding = PaddingMode.PKCS7;
+
+                    using (var transform = tdes.CreateEncryptor())
+                    {
+                        byte[] textBytes = UTF8Encoding.UTF8.GetBytes(text);
+                        byte[] bytes = transform.TransformFinalBlock(textBytes, 0, textBytes.Length);
+                        return Convert.ToBase64String(bytes, 0, bytes.Length);
+                    }
+                }
+            }
+        }
+
+        private string DecryptString(string cipher, string key)
+        {
+            using (var md5 = new MD5CryptoServiceProvider())
+            {
+                using (var tdes = new TripleDESCryptoServiceProvider())
+                {
+                    tdes.Key = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
+                    tdes.Mode = CipherMode.ECB;
+                    tdes.Padding = PaddingMode.PKCS7;
+
+                    using (var transform = tdes.CreateDecryptor())
+                    {
+                        byte[] cipherBytes = Convert.FromBase64String(cipher);
+                        byte[] bytes = transform.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
+                        return UTF8Encoding.UTF8.GetString(bytes);
+                    }
+                }
+            }
+        }
+
+        public void GenerateRandomPwdInTextBox(CheckBox cbxRandomPwd, GroupBox gbxPassword)
+        {
+            // Boucle qui vérifie si la case de la génération aléaoire du mot de passe est cochée
+            if (cbxRandomPwd.Checked)
+            {
+                string pwd = GenerateRandomPwd();
+                foreach (Control control in gbxPassword.Controls)
+                {
+                    // Boucle qui vérifie si le contrôleur est un champ texte
+                    if (control is TextBox && control.Name.Contains("tbxPassowrd"))
+                    {
+                        TextBox textBox = control as TextBox;
+                        textBox.Text = pwd;
+                    }
+                }
+            }
+        }
+
+        public void ActionOnFileContent(string key, Safe safe)
+        {
+            ActionOnFile(false, key, "writing", xmlFile.DataFilePath);
+            if (_error == null)
+            {
+                foreach (Entry entry in safe.LstEntry)
+                {
+                    int noIndex = safe.LstEntry.IndexOf(entry);
+                    if (safe.AddedInXmlFile.Contains(noIndex))
+                    {
+                        xmlFile.InsertDataInFile(noIndex, entry.Name, entry.Password, entry.Username, entry.Username, Convert.ToBoolean(entry.Favorites));
+                        break;
+                    }
+                    else if (safe.ModifiedInXmlFile.Contains(noIndex))
+                    {
+                        xmlFile.UpdateDataInXml(noIndex, entry.Name, entry.Password, entry.Username, entry.Username, Convert.ToBoolean(entry.Favorites));
+                        break;
+                    }
+                    else if (safe.DeletedInXmlFile.Contains(noIndex))
+                    {
+                        xmlFile.DeleteDataInXmlFile(noIndex);
+                        safe.LstEntry.RemoveAt(noIndex);
+                        break;
+                    }
+                }
+                ActionOnFile(true, key, "writing", xmlFile.DataFilePath);
+            }
+            safe.AddedInXmlFile.Clear();
+            safe.ModifiedInXmlFile.Clear();
+            safe.DeletedInXmlFile.Clear();
         }
     }
 }

@@ -17,11 +17,12 @@ namespace NotePass.Model
 {
     class XmlFile
     {
-        private string usernameWindows, dirPath, fileXml, _filePath;
+        private string usernameWindows, dirPath, fileDataXml, fileForgottenPwd, _dataFilePath, _forgottenpwdFilePath;
         private Security secure;
         private XDocument xDocument;
 
-        public string FilePath { get => _filePath; }
+        public string DataFilePath { get => _dataFilePath; }
+        public string ForgottenpwdFilePath { get => _forgottenpwdFilePath; }
 
         /// <summary>
         /// Constructeur principal de la classe XmlFile
@@ -33,9 +34,11 @@ namespace NotePass.Model
         public XmlFile()
         {
             usernameWindows = Environment.UserName;
-            fileXml = "datafile.xml";
+            fileDataXml = "datafile.xml";
+            fileForgottenPwd = "forgottenpwd.xml";
             dirPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + "/data/";
-            _filePath = dirPath + fileXml;
+            _dataFilePath = dirPath + fileDataXml;
+            _forgottenpwdFilePath = dirPath + fileForgottenPwd;
             secure = new Security(this);
         }
 
@@ -48,7 +51,7 @@ namespace NotePass.Model
         {
             bool exist = VerifyIfExist();
             // Boucle qui vérifie que le résultat correct
-            if (exist == false)
+            if (!exist)
             {
                 View.FrmRegistry frmRegistry = new View.FrmRegistry(false);
                 frmRegistry.ShowDialog();
@@ -69,7 +72,7 @@ namespace NotePass.Model
                 return false;
             }
             // Boucle qui vérifie si le fichier XML n'existe pas
-            else if (!File.Exists(_filePath + ".aes"))
+            else if (!File.Exists(_dataFilePath + ".aes"))
             {
                 return false;
             }
@@ -79,11 +82,15 @@ namespace NotePass.Model
         /// <summary>
         /// Méthode qui permet de crée le fichier xml (https://stackoverflow.com/questions/4721735/how-to-save-this-string-into-xml-file/4721762)
         /// </summary>
-        public void CreateXmlFile( string password, int Question1, int Question2, int Question3, string Answer1, string Answer2, string Answer3)
+        public void CreateDataXmlFile(int noIndex, string name, string password, string username, string url, bool favorites)
         {
             string textInFile = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + Environment.NewLine + "<data>" + Environment.NewLine + "</data>";
-            File.WriteAllText(_filePath, textInFile);
-            InsertFirstDataInFile(0, "NotePass", password, usernameWindows, Question1, Question2, Question3, Answer1, Answer2, Answer3, false);
+            File.WriteAllText(_dataFilePath, textInFile);
+            if (name == "NotePass")
+            {
+                username = usernameWindows;
+            }
+            InsertDataInFile(noIndex, name, password, username, url, favorites);
         }
 
         /// <summary>
@@ -99,9 +106,9 @@ namespace NotePass.Model
             }
         }
 
-        public void InsertDataInFile(int noIndex ,string nameOf, string passwordOf, string usernameOf, string urlOf, bool isFavorites)
+        public void InsertDataInFile(int noIndex, string nameOf, string passwordOf, string usernameOf, string urlOf, bool isFavorites)
         {
-            xDocument = XDocument.Load(_filePath);
+            xDocument = XDocument.Load(_dataFilePath);
 
             XElement id = new XElement("id");
             XElement name = new XElement("name", nameOf);
@@ -109,58 +116,117 @@ namespace NotePass.Model
             XElement username = new XElement("username", usernameOf);
             XElement url = new XElement("url", urlOf);
             XElement favorites = new XElement("favorites", isFavorites);
-            XElement date = new XElement("date", DateTime.Now.ToString("MM:dd:yyyy HH:mm"));
+            XElement date = new XElement("date", DateTime.Now.ToString("MM:dd:yyyy HH:mm:ss"));
 
             id.SetAttributeValue("no", noIndex);
             xDocument.Root.Add(id);
             id.Add(name, password, username, url, favorites, date);
-            xDocument.Save(_filePath);
+            xDocument.Save(_dataFilePath);
         }
 
-        private void InsertFirstDataInFile(int noIndex, string nameOf, string passwordOf, string usernameOf, int Question1, int Question2, int Question3, string Answer1, string Answer2, string Answer3, bool isFavorites)
+        public void CreateForgottenPwdXmlFile(int Question1, int Question2, int Question3, string password, string Answer1, string Answer2, string Answer3)
         {
-            xDocument = XDocument.Load(_filePath);
+            string passwordOfQ1 = secure.ActionOnString(true, password, Answer1);
+            string passwordOfQ2 = secure.ActionOnString(true, password, Answer2);
+            string passwordOfQ3 = secure.ActionOnString(true, password, Answer3);
 
-            XElement id = new XElement("id");
-            XElement name = new XElement("name", nameOf);
-            XElement password = new XElement("password", passwordOf);
-            XElement username = new XElement("username", usernameOf);
-            XElement firstQuestion = new XElement("firstQuestion", Answer1);
-            XElement secondQuestion = new XElement("secondQuestion", Answer2);
-            XElement thirdQuestion = new XElement("thirdQuestion", Answer3);
-            XElement favorites = new XElement("favorites", isFavorites);
-            XElement date = new XElement("date", DateTime.Now.ToString("MM:dd:yyyy HH:mm:ss"));
+            string textInFile = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + Environment.NewLine + "<question>" + Environment.NewLine + "</question>";
+            File.WriteAllText(_forgottenpwdFilePath, textInFile);
+            InsertQuestionsInto(Question1, Question2, Question3, passwordOfQ1, passwordOfQ2, passwordOfQ3);
+            secure.ActionOnFile(true, secure.StringEncryptPwd, "", _forgottenpwdFilePath);
+        }
 
-            id.SetAttributeValue("no", noIndex);
+        private void InsertQuestionsInto(int Question1, int Question2, int Question3, string passwordOfQ1, string passwordOfQ2, string passwordOfQ3)
+        {
+            xDocument = XDocument.Load(_forgottenpwdFilePath);
+
+            XElement firstQuestion = new XElement("firstQuestion", passwordOfQ1);
+            XElement secondQuestion = new XElement("secondQuestion", passwordOfQ2);
+            XElement thirdQuestion = new XElement("thirdQuestion", passwordOfQ3);
+
+
             firstQuestion.SetAttributeValue("id", Question1);
             secondQuestion.SetAttributeValue("id", Question2);
             thirdQuestion.SetAttributeValue("id", Question3);
 
-            xDocument.Root.Add(id);
-            id.Add(name, password, username, firstQuestion, secondQuestion, thirdQuestion, favorites, date);
-            xDocument.Save(_filePath);
+            xDocument.Root.Add(firstQuestion, secondQuestion, thirdQuestion);
+            xDocument.Save(_forgottenpwdFilePath);
         }
 
-        /// <summary>
-        /// Méthode qui permet de récupérer les données du fichier xml et de les mettre dans une liste
-        /// </summary>
-        /// <returns> La liste de donnée </returns>
+        public List<int> GetIndexQuestions()
+        {
+            List<int> question = new List<int>();
+
+            secure.ActionOnFile(false, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
+            xDocument = XDocument.Load(_forgottenpwdFilePath);
+            foreach (XElement element in xDocument.Descendants("question").Nodes().ToList())
+            {
+                question.Add(Convert.ToInt32(element.Attribute("id").Value));
+            }
+            secure.ActionOnFile(true, secure.StringEncryptPwd, "", _forgottenpwdFilePath);
+
+            return question;
+        }
+
         public List<Entry> GetDataInArray()
         {
             List<Entry> data = new List<Entry>();
-            xDocument = XDocument.Load(_filePath);
+            DateTime dateTime;
+            xDocument = XDocument.Load(_dataFilePath);
 
             // Boucle qui parcour les données dans le fichiers XML
             foreach (XElement element in xDocument.Descendants("data").Nodes().ToList())
             {
-                if((int)element.Element("id").Attribute("no") == 0)
-                {
-
-                }
-                data.Add(new Entry(element.Element("name").Value, element.Element("url").Value, element.Element("password").Value, element.Element("username").Value, Convert.ToDateTime(element.Element("date").Value), element.Element("favorites").Value));
+                dateTime = DateTime.ParseExact(element.Element("date").Value, "MM:dd:yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture); //Yann heleped
+                data.Add(new Entry(element.Element("name").Value, element.Element("url").Value, element.Element("password").Value, element.Element("username").Value, dateTime, element.Element("favorites").Value));
             }
 
             return data;
+        }
+
+        public void UpdateDataInXml(int noIndex, string nameOf, string passwordOf, string usernameOf, string urlOf, bool isFavorites)
+        {
+            xDocument = XDocument.Load(_dataFilePath);
+            foreach (XElement parent in xDocument.Root.Elements("id"))
+            {
+                if ((int)parent.Attribute("num") == noIndex)
+                {
+                    if ((string)parent.Element("name") != nameOf)
+                    {
+                        parent.Element("name").Value = nameOf;
+                    }
+                    else if ((string)parent.Element("password") != passwordOf)
+                    {
+                        parent.Element("password").Value = passwordOf;
+                    }
+                    else if ((string)parent.Element("username") != usernameOf)
+                    {
+                        parent.Element("username").Value = usernameOf;
+                    }
+                    else if ((string)parent.Element("url") != urlOf)
+                    {
+                        parent.Element("url").Value = urlOf;
+                    }
+                    else if ((string)parent.Element("favorites") != isFavorites.ToString())
+                    {
+                        parent.Element("favorites").Value = isFavorites.ToString();
+                    }
+                }
+            }
+            xDocument.Save(_dataFilePath);
+        }
+
+        public void DeleteDataInXmlFile(int index)
+        {
+            xDocument = XDocument.Load(_dataFilePath);
+            foreach (XElement parent in xDocument.Root.Elements("id"))
+            {
+                if ((int)parent.Attribute("num") == index)
+                {
+                    parent.Remove();
+                }
+            }
+            xDocument.Save(_dataFilePath);
         }
     }
 }

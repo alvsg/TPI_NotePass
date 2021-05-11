@@ -57,6 +57,7 @@ namespace NotePass
             // 
             this.tbxPassword.Location = new System.Drawing.Point(81, 118);
             this.tbxPassword.Name = "tbxPassword";
+            this.tbxPassword.PasswordChar = '*';
             this.tbxPassword.Size = new System.Drawing.Size(272, 20);
             this.tbxPassword.TabIndex = 7;
             this.tbxPassword.TextChanged += new System.EventHandler(this.tbxPassword_TextChanged);

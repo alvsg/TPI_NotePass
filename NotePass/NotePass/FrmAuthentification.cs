@@ -70,7 +70,7 @@ namespace NotePass
             // Boucle qui vérifie que le contenu du champs texte soit correct ou non vide
             if (!string.IsNullOrWhiteSpace(tbxPassword.Text))
             {
-                secure.ActionOnFile(false, tbxPassword.Text, "");
+                secure.ActionOnFile(false, tbxPassword.Text, "data", xmlFile.DataFilePath);
                 // Boucle qui vérifie qu'il n'y a pas d'erreur lors du déchiffrage avec le mot de passe entrée par l'utilisateur
                 if (secure.Error == null)
                 {
