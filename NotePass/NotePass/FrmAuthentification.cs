@@ -21,15 +21,19 @@ namespace NotePass
     {
         private Model.XmlFile xmlFile;
         private Model.Security secure;
-        private Model.UserInput userInput;
+        private View.UserInput userInput;
+        private List<string> _lstAnswer;
         private int attempt;
+
+        public List<string> LstAnswer { get => _lstAnswer; set => _lstAnswer = value; }
 
         public FrmAuthentification()
         {
             InitializeComponent();
             xmlFile = new Model.XmlFile();
+            _lstAnswer = new List<string>();
             secure = new Model.Security(xmlFile);
-            userInput = new Model.UserInput();
+            userInput = new View.UserInput();
             attempt = 0;
         }
 
@@ -41,7 +45,7 @@ namespace NotePass
         /// <param name="e"></param>
         private void FrmAuthentification_Load(object sender, EventArgs e)
         {
-            xmlFile.VerifyIfFirstOpen(this);
+            xmlFile.VerifyIfFirstOpen(this, _lstAnswer);
         }
 
         /// <summary>
@@ -66,7 +70,6 @@ namespace NotePass
         /// <param name="e"></param>
         private void btnEnter_Click(object sender, EventArgs e)
         {
-            secure.Error = null;
             // Boucle qui vérifie que le contenu du champs texte soit correct ou non vide
             if (!string.IsNullOrWhiteSpace(tbxPassword.Text))
             {
@@ -79,7 +82,7 @@ namespace NotePass
                 else
                 {
                     attempt++;
-                    userInput.IsNotAttemptingAnymore(attempt, lblMessage, tbxPassword, true);
+                    userInput.IsNotAttemptingAnymore(attempt, lblMessage, tbxPassword, true, this);
                     pbxMessage.Visible = true;
                     lblMessage.Visible = true;
                 }

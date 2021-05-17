@@ -8,7 +8,8 @@ namespace NotePass.Model
 {
     public class Entry
     {
-        private string _name, _url, _password, _username, _favorites, _firstAnswer, _secondAnswer, _thirdAwnser;
+        private string _name, _url, _password, _username, _favorites;
+        private List<string> _lstAnswer;
         private DateTime _date;
 
         public string Name { get => _name; set => _name = value; }
@@ -17,9 +18,7 @@ namespace NotePass.Model
         public string Username { get => _username; set => _username = value; }
         public string Favorites { get => _favorites; set => _favorites = value; }
         public DateTime Date { get => _date; set => _date = value; }
-        public string FirstAnswer { get => _firstAnswer; set => _firstAnswer = value; }
-        public string SecondAnswer { get => _secondAnswer; set => _secondAnswer = value; }
-        public string ThirdAnswer { get => _thirdAwnser; set => _thirdAwnser = value; }
+        public List<string> LstAnswer { get => _lstAnswer; }
 
         public Entry(string nameOf, string urlOf, string passwordOf, string usernameOf, DateTime date, string favoritesOf)
         {
@@ -31,16 +30,18 @@ namespace NotePass.Model
             _favorites = favoritesOf;
         }
 
-        public Entry(string nameOf, string passwordOf, string usernameOf, string answer1, string answer2, string answer3, DateTime date, string favoritesOf)
+        public Entry(string nameOf, string urlOf, string passwordOf, string usernameOf, string favoritesOf)
         {
             _name = nameOf;
+            _url = urlOf;
             _password = passwordOf;
             _username = usernameOf;
-            _firstAnswer = answer1;
-            _secondAnswer = answer2;
-            _thirdAwnser = answer3;
-            _date = date;
             _favorites = favoritesOf;
+        }
+
+        public Entry(List<string> answers)
+        {
+            _lstAnswer = answers;
         }
     }
 }

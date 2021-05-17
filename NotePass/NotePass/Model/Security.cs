@@ -27,7 +27,7 @@ namespace NotePass.Model
         private XmlFile xmlFile;
         private string _stringEncryptPwd;
 
-        public string Error { get => _error; set => _error = value; }
+        public string Error { get => _error; }
         public string StringEncryptPwd { get => _stringEncryptPwd; }
 
         /// <summary>
@@ -71,6 +71,8 @@ namespace NotePass.Model
         /// <param name="inProgress">L'action en cours</param>
         public void ActionOnFile(bool encrypt, string password, string inProgress, string filePath)
         {
+            _error = null;
+
             // Epingle le mot de passe
             GCHandle gch = GCHandle.Alloc(password, GCHandleType.Pinned);
 
@@ -303,21 +305,29 @@ namespace NotePass.Model
 
         private string DecryptString(string cipher, string key)
         {
-            using (var md5 = new MD5CryptoServiceProvider())
+            try
             {
-                using (var tdes = new TripleDESCryptoServiceProvider())
+                using (var md5 = new MD5CryptoServiceProvider())
                 {
-                    tdes.Key = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
-                    tdes.Mode = CipherMode.ECB;
-                    tdes.Padding = PaddingMode.PKCS7;
-
-                    using (var transform = tdes.CreateDecryptor())
+                    using (var tdes = new TripleDESCryptoServiceProvider())
                     {
-                        byte[] cipherBytes = Convert.FromBase64String(cipher);
-                        byte[] bytes = transform.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
-                        return UTF8Encoding.UTF8.GetString(bytes);
+                        tdes.Key = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
+                        tdes.Mode = CipherMode.ECB;
+                        tdes.Padding = PaddingMode.PKCS7;
+
+                        using (var transform = tdes.CreateDecryptor())
+                        {
+                            byte[] cipherBytes = Convert.FromBase64String(cipher);
+                            byte[] bytes = transform.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
+                            return UTF8Encoding.UTF8.GetString(bytes);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                _error = "Error : " + ex.ToString();
+                return null;
             }
         }
 
@@ -330,7 +340,7 @@ namespace NotePass.Model
                 foreach (Control control in gbxPassword.Controls)
                 {
                     // Boucle qui vérifie si le contrôleur est un champ texte
-                    if (control is TextBox && control.Name.Contains("tbxPassowrd"))
+                    if (control is TextBox && control.Tag.ToString() == "Password")
                     {
                         TextBox textBox = control as TextBox;
                         textBox.Text = pwd;
@@ -341,34 +351,44 @@ namespace NotePass.Model
 
         public void ActionOnFileContent(string key, Safe safe)
         {
+            xmlFile = new XmlFile();
             ActionOnFile(false, key, "writing", xmlFile.DataFilePath);
             if (_error == null)
             {
                 foreach (Entry entry in safe.LstEntry)
                 {
                     int noIndex = safe.LstEntry.IndexOf(entry);
-                    if (safe.AddedInXmlFile.Contains(noIndex))
+                    if (safe.AddedInXmlFile != null && safe.AddedInXmlFile.Contains(noIndex))
                     {
-                        xmlFile.InsertDataInFile(noIndex, entry.Name, entry.Password, entry.Username, entry.Username, Convert.ToBoolean(entry.Favorites));
+                        xmlFile.InsertDataInFile(noIndex, entry.Name, entry.Password, entry.Username, entry.Url, entry.Date, Convert.ToBoolean(entry.Favorites));
+                        safe.AddedInXmlFile.Clear();
                         break;
                     }
-                    else if (safe.ModifiedInXmlFile.Contains(noIndex))
+                    else if (safe.ModifiedInXmlFile != null && safe.ModifiedInXmlFile.Contains(noIndex))
                     {
-                        xmlFile.UpdateDataInXml(noIndex, entry.Name, entry.Password, entry.Username, entry.Username, Convert.ToBoolean(entry.Favorites));
+                        xmlFile.UpdateDataInXml(noIndex, entry.Name, entry.Password, entry.Username, entry.Url, Convert.ToBoolean(entry.Favorites));
+                        if (key != entry.Password)
+                        {
+                            key = entry.Password;
+                            if (noIndex == 0)
+                            {
+                                ActionOnFile(false, _stringEncryptPwd, "writing", xmlFile.ForgottenpwdFilePath);
+                                xmlFile.UpdatePassword(key);
+                            }
+                        }
+                        safe.ModifiedInXmlFile.Clear();
                         break;
                     }
-                    else if (safe.DeletedInXmlFile.Contains(noIndex))
+                    else if (safe.DeletedInXmlFile != null && safe.DeletedInXmlFile.Contains(noIndex))
                     {
                         xmlFile.DeleteDataInXmlFile(noIndex);
                         safe.LstEntry.RemoveAt(noIndex);
+                        safe.DeletedInXmlFile.Clear();
                         break;
                     }
                 }
                 ActionOnFile(true, key, "writing", xmlFile.DataFilePath);
             }
-            safe.AddedInXmlFile.Clear();
-            safe.ModifiedInXmlFile.Clear();
-            safe.DeletedInXmlFile.Clear();
         }
     }
 }

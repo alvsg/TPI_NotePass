@@ -11,6 +11,7 @@ using System.IO; //Directive ajouté manuellement
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms; //Directive ajouté manuellement
 using System.Xml.Linq; //Directive ajouté manuellement
 
 namespace NotePass.Model
@@ -18,6 +19,7 @@ namespace NotePass.Model
     class XmlFile
     {
         private string usernameWindows, dirPath, fileDataXml, fileForgottenPwd, _dataFilePath, _forgottenpwdFilePath;
+        private List<string> _lstAwnser;
         private Security secure;
         private XDocument xDocument;
 
@@ -42,12 +44,17 @@ namespace NotePass.Model
             secure = new Security(this);
         }
 
+        public XmlFile(List<string> answers) : this()
+        {
+            _lstAwnser = answers;
+        }
+
         /// <summary>
         /// Méthode qui permet de vérifier si l'utilisateur ouvre la première fois l'application
         ///     Si oui, le fichier xml est crée et le formulaire de création s'affiche 
         /// </summary>
         /// <param name="frmAuthentification">Le formulaire d'authentification</param>
-        public void VerifyIfFirstOpen(FrmAuthentification frmAuthentification)
+        public void VerifyIfFirstOpen(FrmAuthentification frmAuthentification, List<string> answers)
         {
             bool exist = VerifyIfExist();
             // Boucle qui vérifie que le résultat correct
@@ -90,7 +97,7 @@ namespace NotePass.Model
             {
                 username = usernameWindows;
             }
-            InsertDataInFile(noIndex, name, password, username, url, favorites);
+            InsertDataInFile(noIndex, name, password, username, url, DateTime.Now, favorites);
         }
 
         /// <summary>
@@ -106,7 +113,7 @@ namespace NotePass.Model
             }
         }
 
-        public void InsertDataInFile(int noIndex, string nameOf, string passwordOf, string usernameOf, string urlOf, bool isFavorites)
+        public void InsertDataInFile(int noIndex, string nameOf, string passwordOf, string usernameOf, string urlOf, DateTime added, bool isFavorites)
         {
             xDocument = XDocument.Load(_dataFilePath);
 
@@ -116,7 +123,7 @@ namespace NotePass.Model
             XElement username = new XElement("username", usernameOf);
             XElement url = new XElement("url", urlOf);
             XElement favorites = new XElement("favorites", isFavorites);
-            XElement date = new XElement("date", DateTime.Now.ToString("MM:dd:yyyy HH:mm:ss"));
+            XElement date = new XElement("date", added.ToString("MM:dd:yyyy HH:mm:ss"));
 
             id.SetAttributeValue("no", noIndex);
             xDocument.Root.Add(id);
@@ -124,25 +131,26 @@ namespace NotePass.Model
             xDocument.Save(_dataFilePath);
         }
 
-        public void CreateForgottenPwdXmlFile(int Question1, int Question2, int Question3, string password, string Answer1, string Answer2, string Answer3)
+        public void CreateForgottenPwdXmlFile(int Question1, int Question2, int Question3, string password, List<string> answers)
         {
-            string passwordOfQ1 = secure.ActionOnString(true, password, Answer1);
-            string passwordOfQ2 = secure.ActionOnString(true, password, Answer2);
-            string passwordOfQ3 = secure.ActionOnString(true, password, Answer3);
+            _lstAwnser = answers;
+            string passwordOfQ1 = secure.ActionOnString(true, password, _lstAwnser[0]);
+            string passwordOfQ2 = secure.ActionOnString(true, password, _lstAwnser[1]);
+            string passwordOfQ3 = secure.ActionOnString(true, password, _lstAwnser[2]);
 
-            string textInFile = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + Environment.NewLine + "<question>" + Environment.NewLine + "</question>";
+            string textInFile = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + Environment.NewLine + "<questions>" + Environment.NewLine + "</questions>";
             File.WriteAllText(_forgottenpwdFilePath, textInFile);
             InsertQuestionsInto(Question1, Question2, Question3, passwordOfQ1, passwordOfQ2, passwordOfQ3);
-            secure.ActionOnFile(true, secure.StringEncryptPwd, "", _forgottenpwdFilePath);
+            secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
         }
 
         private void InsertQuestionsInto(int Question1, int Question2, int Question3, string passwordOfQ1, string passwordOfQ2, string passwordOfQ3)
         {
             xDocument = XDocument.Load(_forgottenpwdFilePath);
 
-            XElement firstQuestion = new XElement("firstQuestion", passwordOfQ1);
-            XElement secondQuestion = new XElement("secondQuestion", passwordOfQ2);
-            XElement thirdQuestion = new XElement("thirdQuestion", passwordOfQ3);
+            XElement firstQuestion = new XElement("question", passwordOfQ1);
+            XElement secondQuestion = new XElement("question", passwordOfQ2);
+            XElement thirdQuestion = new XElement("question", passwordOfQ3);
 
 
             firstQuestion.SetAttributeValue("id", Question1);
@@ -159,11 +167,11 @@ namespace NotePass.Model
 
             secure.ActionOnFile(false, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
             xDocument = XDocument.Load(_forgottenpwdFilePath);
-            foreach (XElement element in xDocument.Descendants("question").Nodes().ToList())
+            foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
             {
                 question.Add(Convert.ToInt32(element.Attribute("id").Value));
             }
-            secure.ActionOnFile(true, secure.StringEncryptPwd, "", _forgottenpwdFilePath);
+            secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
 
             return question;
         }
@@ -189,7 +197,7 @@ namespace NotePass.Model
             xDocument = XDocument.Load(_dataFilePath);
             foreach (XElement parent in xDocument.Root.Elements("id"))
             {
-                if ((int)parent.Attribute("num") == noIndex)
+                if ((int)parent.Attribute("no") == noIndex)
                 {
                     if ((string)parent.Element("name") != nameOf)
                     {
@@ -221,12 +229,71 @@ namespace NotePass.Model
             xDocument = XDocument.Load(_dataFilePath);
             foreach (XElement parent in xDocument.Root.Elements("id"))
             {
-                if ((int)parent.Attribute("num") == index)
+                if ((int)parent.Attribute("no") == index)
                 {
                     parent.Remove();
                 }
             }
             xDocument.Save(_dataFilePath);
+        }
+
+        public List<Entry> GetAllFavoritesData()
+        {
+            List<Entry> favorites = new List<Entry>();
+            DateTime dateTime;
+            xDocument = XDocument.Load(_dataFilePath);
+
+            // Boucle qui parcour les données dans le fichiers XML
+            foreach (XElement element in xDocument.Descendants("data").Nodes().ToList())
+            {
+                if (Convert.ToBoolean(element.Element("favorites").Value))
+                {
+                    dateTime = DateTime.ParseExact(element.Element("date").Value, "MM:dd:yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture); //Yann heleped
+                    favorites.Add(new Entry(element.Element("name").Value, element.Element("url").Value, element.Element("password").Value, element.Element("username").Value, dateTime, element.Element("favorites").Value));
+                }
+            }
+
+            return favorites;
+        }
+
+        public bool VerifyIfResponseIfRight(int selectedQuestion, string response, ComboBox comboBox)
+        {
+            string password = "";
+            secure.ActionOnFile(false, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
+            List<int> lstSelectedQuestion = (List<int>)comboBox.Tag;
+            xDocument = XDocument.Load(_forgottenpwdFilePath);
+
+            foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
+            {
+                if (Convert.ToInt32(element.Attribute("id").Value) == lstSelectedQuestion[selectedQuestion])
+                {
+                    password = secure.ActionOnString(false, element.Value, response);
+                    if(password != null)
+                    {
+                        secure.ActionOnFile(false, password, "writing", _dataFilePath);
+                    }
+
+                    if (secure.Error != null)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public void UpdatePassword(string newPassword)
+        {
+            xDocument = XDocument.Load(_forgottenpwdFilePath);
+            foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
+            {
+                foreach(string answer in _lstAwnser)
+                {
+                    element.Value = secure.ActionOnString(true, newPassword, answer);
+                }
+            }
+            xDocument.Save(_forgottenpwdFilePath);
+            secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
         }
     }
 }

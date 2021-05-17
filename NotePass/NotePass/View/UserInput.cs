@@ -7,7 +7,7 @@ using System.Text.RegularExpressions; //Directive ajouté manuellement
 using System.Threading.Tasks;
 using System.Windows.Forms; //Directive ajouté manuellement
 
-namespace NotePass.Model
+namespace NotePass.View
 {
     class UserInput
     {
@@ -16,7 +16,7 @@ namespace NotePass.Model
         private List<int> lstSelectedQuestions;
         private const int MAX_ATTEMPTS = 2;
         private int noAttemptsLeft = 2;
-        private XmlFile xmlFile;
+        private Model.XmlFile xmlFile;
 
         public UserInput(ComboBox cbxQuestions1, ComboBox cbxQuestions2, ComboBox cbxQuestions3) : this()
         {
@@ -31,8 +31,9 @@ namespace NotePass.Model
 
         public UserInput(ComboBox cbxQuestions4) : this()
         {
-            xmlFile = new XmlFile();
+            xmlFile = new Model.XmlFile();
             lstSelectedQuestions = xmlFile.GetIndexQuestions();
+            cbxQuestions4.Tag = lstSelectedQuestions;
             GenerateQuestionFromIndex(cbxQuestions4);
         }
 
@@ -55,7 +56,7 @@ namespace NotePass.Model
 
         private void GenerateQuestionFromIndex(ComboBox comboBox)
         {
-            foreach(int index in lstSelectedQuestions)
+            foreach (int index in lstSelectedQuestions)
             {
                 comboBox.Items.Add(lstQuestions[index]);
             }
@@ -88,9 +89,9 @@ namespace NotePass.Model
             return selected;
         }
 
-        public void IsNotAttemptingAnymore(int attempt, Label lblMessage, TextBox tbxPassword, bool isAuthentification)
+        public void IsNotAttemptingAnymore(int attempt, Label lblMessage, TextBox tbxPassword, bool isAuthentification, Form form)
         {
-            if (!IsStillAttempting(attempt, lblMessage))
+            if (!IsStillAttempting(attempt, lblMessage, form))
             {
                 tbxPassword.Enabled = false;
                 tbxPassword.Text = string.Empty;
@@ -105,13 +106,21 @@ namespace NotePass.Model
             }
         }
 
-        private bool IsStillAttempting(int attempt, Label lblMessage)
+        private bool IsStillAttempting(int attempt, Label lblMessage, Form form)
         {
             if (attempt > MAX_ATTEMPTS)
             {
                 return false;
             }
-            lblMessage.Text = "Le mot de passe est incorrect ! Il vous reste " + (noAttemptsLeft--).ToString() + " tentatives.";
+
+            if (form.Name == "FrmAuthentification")
+            {
+                lblMessage.Text = "Le mot de passe est incorrect ! Il vous reste " + (noAttemptsLeft--).ToString() + " tentatives.";
+            }
+            else
+            {
+                lblMessage.Text = "La réponse est incorrect ! Il vous reste " + (noAttemptsLeft--).ToString() + " tentatives.";
+            }
             return true;
         }
 
@@ -149,6 +158,64 @@ namespace NotePass.Model
                 }
             }
             return false;
+        }
+
+        public List<Model.Entry> SortTheList(List<Model.Entry> lstEntry, string criterion)
+        {
+            List<Model.Entry> theList = new List<Model.Entry>();
+            switch (criterion)
+            {
+                case "tsmiAlphabeticalOrder":
+                    theList = SortInAplhabeticalOrder(lstEntry);
+                    break;
+                case "tsmiDateAsc":
+                    theList = SortInOrderOfDateAdded(lstEntry, "ASC");
+                    break;
+                case "tsmiDateDesc":
+                    theList = SortInOrderOfDateAdded(lstEntry, "DESC");
+                    break;
+            }
+            return theList;
+        }
+
+        private List<Model.Entry> SortInAplhabeticalOrder(List<Model.Entry> lstEntry)
+        {
+            List<Model.Entry> theList = lstEntry.OrderBy(x => x.Name).ToList();
+            return theList;
+        }
+
+        private List<Model.Entry> SortInOrderOfDateAdded(List<Model.Entry> lstEntry, string order)
+        {
+            List<Model.Entry> theList = new List<Model.Entry>();
+            lstEntry = lstEntry.OrderBy(x => x.Date).ToList();
+            if (order == "DESC")
+            {
+                int oldPosition = lstEntry.Count - 1;
+                for (int newPosition = 0; newPosition < lstEntry.Count; newPosition++)
+                {
+                    theList.Add(lstEntry[oldPosition]);
+                    oldPosition--;
+                }
+                return theList;
+            }
+            return lstEntry;
+        }
+
+        public void IsTheApplicationBlocked(int attempt, int authentificationAttempt, Label lblMessage, TextBox tnxReply, Form form)
+        {
+            if (!IsStillAttempting(attempt, lblMessage, form) && attempt > MAX_ATTEMPTS)
+            {
+                if(authentificationAttempt > MAX_ATTEMPTS)
+                {
+                    lblMessage.Text = "Vous n'avez plus de tentatives !";
+                }
+                else
+                {
+                    lblMessage.Text = "Vous n'avez plus de tentatives ! Veuillez choisir un autre moyen de connexion.";
+                }
+                tnxReply.Text = string.Empty;
+                tnxReply.Enabled = false;
+            }
         }
     }
 }

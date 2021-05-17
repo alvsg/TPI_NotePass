@@ -41,8 +41,8 @@ namespace NotePass.View
             this.tsmiOrganize = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAlphabeticalOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDateAdded = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiAsc = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiDesc = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDateAsc = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDateDesc = new System.Windows.Forms.ToolStripMenuItem();
             this.aideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
@@ -86,20 +86,21 @@ namespace NotePass.View
             this.tsmiNew.Image = global::NotePass.Properties.Resources.ajouter_entree;
             this.tsmiNew.Name = "tsmiNew";
             this.tsmiNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.tsmiNew.Size = new System.Drawing.Size(165, 22);
+            this.tsmiNew.Size = new System.Drawing.Size(180, 22);
             this.tsmiNew.Text = "&Nouveau";
+            this.tsmiNew.Click += new System.EventHandler(this.tsmiNew_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(162, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // tsmiExit
             // 
             this.tsmiExit.Image = global::NotePass.Properties.Resources.fermer;
             this.tsmiExit.Name = "tsmiExit";
             this.tsmiExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.tsmiExit.Size = new System.Drawing.Size(165, 22);
+            this.tsmiExit.Size = new System.Drawing.Size(180, 22);
             this.tsmiExit.Text = "&Quitter";
             // 
             // tsmiModify
@@ -116,21 +117,21 @@ namespace NotePass.View
             // 
             this.tsmiCopy.Name = "tsmiCopy";
             this.tsmiCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.tsmiCopy.Size = new System.Drawing.Size(154, 22);
+            this.tsmiCopy.Size = new System.Drawing.Size(180, 22);
             this.tsmiCopy.Text = "Copier";
             // 
             // tsmiCut
             // 
             this.tsmiCut.Name = "tsmiCut";
             this.tsmiCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.tsmiCut.Size = new System.Drawing.Size(154, 22);
+            this.tsmiCut.Size = new System.Drawing.Size(180, 22);
             this.tsmiCut.Text = "Couper";
             // 
             // tsmiPaste
             // 
             this.tsmiPaste.Name = "tsmiPaste";
             this.tsmiPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.tsmiPaste.Size = new System.Drawing.Size(154, 22);
+            this.tsmiPaste.Size = new System.Drawing.Size(180, 22);
             this.tsmiPaste.Text = "Coller";
             // 
             // tsmiOrganize
@@ -146,32 +147,35 @@ namespace NotePass.View
             // 
             this.tsmiAlphabeticalOrder.Image = global::NotePass.Properties.Resources.ordre_aphabetique;
             this.tsmiAlphabeticalOrder.Name = "tsmiAlphabeticalOrder";
-            this.tsmiAlphabeticalOrder.Size = new System.Drawing.Size(176, 22);
+            this.tsmiAlphabeticalOrder.Size = new System.Drawing.Size(180, 22);
             this.tsmiAlphabeticalOrder.Text = "Ordre a&lphabétique";
+            this.tsmiAlphabeticalOrder.Click += new System.EventHandler(this.tsmiAlphabeticalOrder_Click);
             // 
             // tsmiDateAdded
             // 
             this.tsmiDateAdded.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiAsc,
-            this.tsmiDesc});
+            this.tsmiDateAsc,
+            this.tsmiDateDesc});
             this.tsmiDateAdded.Image = global::NotePass.Properties.Resources.date;
             this.tsmiDateAdded.Name = "tsmiDateAdded";
-            this.tsmiDateAdded.Size = new System.Drawing.Size(176, 22);
+            this.tsmiDateAdded.Size = new System.Drawing.Size(180, 22);
             this.tsmiDateAdded.Text = "&Date d\'ajout";
             // 
-            // tsmiAsc
+            // tsmiDateAsc
             // 
-            this.tsmiAsc.Image = global::NotePass.Properties.Resources.date_croissant;
-            this.tsmiAsc.Name = "tsmiAsc";
-            this.tsmiAsc.Size = new System.Drawing.Size(167, 22);
-            this.tsmiAsc.Text = "Ordre &croissant";
+            this.tsmiDateAsc.Image = global::NotePass.Properties.Resources.date_croissant;
+            this.tsmiDateAsc.Name = "tsmiDateAsc";
+            this.tsmiDateAsc.Size = new System.Drawing.Size(180, 22);
+            this.tsmiDateAsc.Text = "Ordre &croissant";
+            this.tsmiDateAsc.Click += new System.EventHandler(this.tsmiDateAsc_Click);
             // 
-            // tsmiDesc
+            // tsmiDateDesc
             // 
-            this.tsmiDesc.Image = global::NotePass.Properties.Resources.date_decroissant;
-            this.tsmiDesc.Name = "tsmiDesc";
-            this.tsmiDesc.Size = new System.Drawing.Size(167, 22);
-            this.tsmiDesc.Text = "Ordre décroi&ssant";
+            this.tsmiDateDesc.Image = global::NotePass.Properties.Resources.date_decroissant;
+            this.tsmiDateDesc.Name = "tsmiDateDesc";
+            this.tsmiDateDesc.Size = new System.Drawing.Size(180, 22);
+            this.tsmiDateDesc.Text = "Ordre décroi&ssant";
+            this.tsmiDateDesc.Click += new System.EventHandler(this.tsmiDateDesc_Click);
             // 
             // aideToolStripMenuItem
             // 
@@ -212,6 +216,7 @@ namespace NotePass.View
             this.btnHome.TabIndex = 6;
             this.btnHome.Text = "Accueil";
             this.btnHome.UseVisualStyleBackColor = true;
+            this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
             // 
             // btnAdd
             // 
@@ -224,6 +229,7 @@ namespace NotePass.View
             this.btnAdd.TabIndex = 7;
             this.btnAdd.Text = "+";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnFavorites
             // 
@@ -236,6 +242,7 @@ namespace NotePass.View
             this.btnFavorites.TabIndex = 8;
             this.btnFavorites.Text = "Favoris";
             this.btnFavorites.UseVisualStyleBackColor = true;
+            this.btnFavorites.Click += new System.EventHandler(this.btnFavorites_Click);
             // 
             // btnExit
             // 
@@ -318,8 +325,8 @@ namespace NotePass.View
         private System.Windows.Forms.ToolStripMenuItem tsmiOrganize;
         private System.Windows.Forms.ToolStripMenuItem tsmiAlphabeticalOrder;
         private System.Windows.Forms.ToolStripMenuItem tsmiDateAdded;
-        private System.Windows.Forms.ToolStripMenuItem tsmiAsc;
-        private System.Windows.Forms.ToolStripMenuItem tsmiDesc;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDateAsc;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDateDesc;
         private System.Windows.Forms.ToolStripMenuItem aideToolStripMenuItem;
         private System.Windows.Forms.PictureBox pbxLogo;
         private System.Windows.Forms.Label lblTitle;

@@ -16,9 +16,10 @@ namespace NotePass.View
         private Entry _enregistrement;
         private bool showData;
         private List<Entry> lstEntry;
-        private bool clicked = false, favorites = false;
+        private bool clicked = false, favorites;
         private Security secure;
         private UserInput userInput;
+        private XmlFile xmlFile;
 
         public Entry Enregistrement { get => _enregistrement; }
 
@@ -26,7 +27,8 @@ namespace NotePass.View
         {
             InitializeComponent();
 
-            secure = new Security();
+            xmlFile = new XmlFile();
+            secure = new Security(xmlFile);
             userInput = new UserInput();
             _enregistrement = entry;
             showData = show;
@@ -46,21 +48,38 @@ namespace NotePass.View
         {
             if (showData)
             {
+                this.Text = "Formulaire de modification";
+                lblTitle.Text = "Modifier une entrée";
+                lblDescription.Text = "* Les champs du formulaire qui ne peuvent pas être vide";
                 IsTextBoxReadOnly(true);
-                pbxShowPwd.Enabled = false;
+                pbxShowPwd.Enabled = true;
+                cbxRandomPwd.Enabled = false;
                 btnModifier.Enabled = true;
                 btnAction.Text = "Supprimer";
+                if (_enregistrement.Name == "NotePass" && _enregistrement.Username == Environment.UserName)
+                {
+                    btnAction.Enabled = false;
+                    tbxUsername.Enabled = false;
+                    tbxWebSiteOrSoftwareName.Enabled = false;
+                }
                 tbxWebSiteOrSoftwareName.Text = _enregistrement.Name;
                 tbxUrl.Text = _enregistrement.Url;
                 tbxPassowrd.PasswordChar = '*';
                 tbxPassowrd.Text = _enregistrement.Password;
                 tbxUsername.Text = _enregistrement.Username;
                 lblDateAdded.Text = _enregistrement.Date.ToString();
+                if (Convert.ToBoolean(_enregistrement.Favorites))
+                {
+                    pbxFavorites.Image = Properties.Resources.ajouter_favoris;
+                    favorites = Convert.ToBoolean(_enregistrement.Favorites);
+                }
             }
             else
             {
                 btnModifier.Enabled = false;
                 btnAction.Text = "Ajouter";
+                tbxPassowrd.PasswordChar = '*';
+                favorites = false;
             }
         }
 
@@ -86,7 +105,7 @@ namespace NotePass.View
         private void btnModifier_Click(object sender, EventArgs e)
         {
             btnModifier.Enabled = false;
-            pbxShowPwd.Enabled = true;
+            cbxRandomPwd.Enabled = true;
             IsTextBoxReadOnly(false);
             btnAction.Text = "Sauvegarder";
             btnAction.Enabled = true;
@@ -134,22 +153,25 @@ namespace NotePass.View
         {
             btnModifier.Enabled = true;
             btnAction.Text = "Supprimer";
-            if (tbxWebSiteOrSoftwareName != "NotePass" && tbxUsername != Environment.UserName)
+
+            if (_enregistrement.Name != "NotePass" && _enregistrement.Username != Environment.UserName)
             {
                 _enregistrement.Name = IsItDifferent(_enregistrement.Name, tbxWebSiteOrSoftwareName);
                 _enregistrement.Username = IsItDifferent(_enregistrement.Username, tbxUsername);
             }
-            else if (_enregistrement.Url != tbxUrl)
+
+            if (_enregistrement.Url != tbxUrl)
             {
                 _enregistrement.Url = tbxUrl;
             }
+
             _enregistrement.Password = IsItDifferent(_enregistrement.Password, tbxPassowrd);
             _enregistrement.Favorites = IsItDifferent(_enregistrement.Favorites.ToString(), favorites.ToString());
         }
 
         private string IsItDifferent(string oldEntry, string newEntry)
         {
-            if (string.IsNullOrWhiteSpace(newEntry) && newEntry != oldEntry)
+            if (!string.IsNullOrWhiteSpace(newEntry) && newEntry != oldEntry)
             {
                 return newEntry;
             }
@@ -219,12 +241,7 @@ namespace NotePass.View
 
         private void AddEntry(string tbxWebSiteOrSoftwareName, string tbxUrl, string tbxPassowrd, string tbxUsername, bool pbxFavorites)
         {
-            _enregistrement.Name = tbxWebSiteOrSoftwareName;
-            _enregistrement.Url = tbxUrl;
-            _enregistrement.Password = tbxPassowrd;
-            _enregistrement.Username = tbxUsername;
-            _enregistrement.Favorites = pbxFavorites.ToString();
+            _enregistrement = new Entry(tbxWebSiteOrSoftwareName, tbxUrl, tbxPassowrd, tbxUsername, pbxFavorites.ToString());
         }
-
     }
 }

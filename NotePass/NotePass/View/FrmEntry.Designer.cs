@@ -211,6 +211,7 @@ namespace NotePass.View
             this.tbxPassowrd.Name = "tbxPassowrd";
             this.tbxPassowrd.Size = new System.Drawing.Size(206, 20);
             this.tbxPassowrd.TabIndex = 1;
+            this.tbxPassowrd.Tag = "Password";
             this.tbxPassowrd.TextChanged += new System.EventHandler(this.VerifyIfNotEmpty);
             // 
             // tbxWebSiteOrSoftwareName

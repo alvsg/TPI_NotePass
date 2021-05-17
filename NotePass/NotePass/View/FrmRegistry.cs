@@ -21,9 +21,13 @@ namespace NotePass.View
     {
         private Model.XmlFile xmlFile;
         private Model.Security secure;
-        private Model.UserInput userInput;
+        private UserInput userInput;
+        private List<string> lstAnswer;
         private bool visiblePwd, visiblePwdConf;
         private bool forgottenPwd;
+        private string _newPassword;
+
+        public string NewPassword { get => _newPassword; }
 
         /// <summary>
         /// Constructeur principal de la classe FrmRegistry
@@ -35,13 +39,15 @@ namespace NotePass.View
 
             xmlFile = new Model.XmlFile();
             secure = new Model.Security(xmlFile);
-            userInput = new Model.UserInput(cbxQuestion1, cbxQuestion2, cbxQuestion3);
+            lstAnswer = new List<string>();
+            userInput = new UserInput(cbxQuestion1, cbxQuestion2, cbxQuestion3);
             btnSave.Enabled = false;
             visiblePwd = false;
             visiblePwdConf = false;
             tbxPassowrd.PasswordChar = '*';
             tbxPasswordConf.PasswordChar = '*';
             forgottenPwd = isForgottenPwd;
+
         }
 
         /// <summary>
@@ -172,8 +178,20 @@ namespace NotePass.View
             // Boucle qui vérifie que les deux champs du mot de passe sont identique
             if (tbxPassowrd.Text == tbxPasswordConf.Text)
             {
-                xmlFile.CreateDataXmlFile(0, "NotePass", tbxPasswordConf.Text, "", "", false);
-                xmlFile.CreateForgottenPwdXmlFile(cbxQuestion1.SelectedIndex, cbxQuestion2.SelectedIndex, cbxQuestion3.SelectedIndex, tbxPasswordConf.Text, tbxQuestion1Answer.Text, tbxQuestion2Answer.Text, tbxQuestion3Answer.Text);
+                if (forgottenPwd)
+                {
+                    xmlFile.UpdatePassword(tbxPasswordConf.Text);
+                    _newPassword = tbxPasswordConf.Text;
+                }
+                else if(!forgottenPwd)
+                {
+                    xmlFile.CreateDataXmlFile(0, "NotePass", tbxPasswordConf.Text, "", "", false);
+                    lstAnswer.Add(tbxQuestion1Answer.Text);
+                    lstAnswer.Add(tbxQuestion2Answer.Text);
+                    lstAnswer.Add(tbxQuestion3Answer.Text);
+                    Model.Entry entry = new Model.Entry(lstAnswer);
+                    xmlFile.CreateForgottenPwdXmlFile(cbxQuestion1.SelectedIndex, cbxQuestion2.SelectedIndex, cbxQuestion3.SelectedIndex, tbxPasswordConf.Text, entry.LstAnswer);
+                }
                 CloseThis();
             }
             else
@@ -190,7 +208,7 @@ namespace NotePass.View
         private void CloseThis()
         {
             this.Hide();
-            View.FrmMain frmMain = new FrmMain(tbxPassowrd.Text);
+            View.FrmMain frmMain = new FrmMain(tbxPasswordConf.Text);
             frmMain.ShowDialog();
             this.Close();
         }
@@ -216,7 +234,7 @@ namespace NotePass.View
             else
             {
                 // Boucle qui vérifie que les champs dans un conteneur ne sont pas vide
-                if (!IsMyTextBoxOrMyComboBoxEmptyOrImproper(gbxPassword))
+                if (IsMyTextBoxOrMyComboBoxEmptyOrImproper(gbxPassword))
                 {
                     btnSave.Enabled = true;
                 }
