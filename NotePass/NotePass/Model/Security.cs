@@ -340,10 +340,13 @@ namespace NotePass.Model
                 foreach (Control control in gbxPassword.Controls)
                 {
                     // Boucle qui vérifie si le contrôleur est un champ texte
-                    if (control is TextBox && control.Tag.ToString() == "Password")
+                    if (control is TextBox)
                     {
                         TextBox textBox = control as TextBox;
-                        textBox.Text = pwd;
+                        if(textBox.Tag != null && textBox.Tag.ToString() == "Password")
+                        {
+                            textBox.Text = pwd;
+                        }
                     }
                 }
             }
@@ -351,7 +354,7 @@ namespace NotePass.Model
 
         public void ActionOnFileContent(string key, Safe safe)
         {
-            xmlFile = new XmlFile();
+            xmlFile = new XmlFile(key, true);
             ActionOnFile(false, key, "writing", xmlFile.DataFilePath);
             if (_error == null)
             {
@@ -373,7 +376,7 @@ namespace NotePass.Model
                             if (noIndex == 0)
                             {
                                 ActionOnFile(false, _stringEncryptPwd, "writing", xmlFile.ForgottenpwdFilePath);
-                                xmlFile.UpdatePassword(key);
+                                xmlFile.UpdatePassword(key, xmlFile.LstAnswer);
                             }
                         }
                         safe.ModifiedInXmlFile.Clear();

@@ -14,9 +14,7 @@ namespace NotePass.View
     public partial class FrmEntry : Form
     {
         private Entry _enregistrement;
-        private bool showData;
-        private List<Entry> lstEntry;
-        private bool clicked = false, favorites;
+        private bool showData, clicked = false, favorites, isFirstDataShown = false;
         private Security secure;
         private UserInput userInput;
         private XmlFile xmlFile;
@@ -32,7 +30,6 @@ namespace NotePass.View
             userInput = new UserInput();
             _enregistrement = entry;
             showData = show;
-            lstEntry = list;
         }
 
         public FrmEntry(bool show)
@@ -61,6 +58,7 @@ namespace NotePass.View
                     btnAction.Enabled = false;
                     tbxUsername.Enabled = false;
                     tbxWebSiteOrSoftwareName.Enabled = false;
+                    isFirstDataShown = true;
                 }
                 tbxWebSiteOrSoftwareName.Text = _enregistrement.Name;
                 tbxUrl.Text = _enregistrement.Url;
@@ -79,6 +77,8 @@ namespace NotePass.View
                 btnModifier.Enabled = false;
                 btnAction.Text = "Ajouter";
                 tbxPassowrd.PasswordChar = '*';
+                lblFavorites.Visible = false;
+                pbxFavorites.Visible = false;
                 favorites = false;
             }
         }
@@ -104,6 +104,9 @@ namespace NotePass.View
 
         private void btnModifier_Click(object sender, EventArgs e)
         {
+            lblFavorites.Visible = false;
+            pbxFavorites.Visible = false;
+            isFirstDataShown = false;
             btnModifier.Enabled = false;
             cbxRandomPwd.Enabled = true;
             IsTextBoxReadOnly(false);
@@ -186,7 +189,10 @@ namespace NotePass.View
 
         private void VerifyIfNotEmpty(object sender, EventArgs e)
         {
-            IsMyBtnEnabled();
+            if (!isFirstDataShown)
+            {
+                IsMyBtnEnabled();
+            }
         }
 
         private void IsMyBtnEnabled()

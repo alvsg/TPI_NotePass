@@ -42,7 +42,7 @@ namespace NotePass.Model
 
         public void OnLoad(List<Entry> lstData, FlowLayoutPanel flpEntry)
         {
-            if(flpEntry.Controls.Count > 0)
+            if (flpEntry.Controls.Count > 0)
             {
                 flpEntry.Controls.Clear();
             }
@@ -101,24 +101,22 @@ namespace NotePass.Model
                     }
                 }
             }
-            else if(frmEntry.DialogResult == DialogResult.Cancel)
+            else if (frmEntry.DialogResult == DialogResult.Cancel)
             {
+                _lstEntry[index].Favorites = frmEntry.Enregistrement.Favorites;
+
                 if (Convert.ToBoolean(frmEntry.Enregistrement.Favorites))
                 {
                     _lstFavorites.Add(frmEntry.Enregistrement);
                 }
                 else
                 {
-                    if (_lstFavorites.IndexOf(frmEntry.Enregistrement) < 0)
-                    {
-                        _lstFavorites.Remove(frmEntry.Enregistrement);
-                    }
+                    _lstFavorites.Remove(frmEntry.Enregistrement);
                 }
 
-                _lstEntry[index].Favorites = frmEntry.Enregistrement.Favorites;
                 _modifiedInXmlFile.Add(index);
             }
-                secure.ActionOnFileContent(frmMain.Key, this);
+            secure.ActionOnFileContent(frmMain.Key, this);
         }
 
         public void AddValuesInData()

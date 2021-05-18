@@ -34,16 +34,11 @@ namespace NotePass.View
             this.tsmiNew = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiModify = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiCut = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOrganize = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAlphabeticalOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDateAdded = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDateAsc = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDateDesc = new System.Windows.Forms.ToolStripMenuItem();
-            this.aideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.btnHome = new System.Windows.Forms.Button();
@@ -53,6 +48,7 @@ namespace NotePass.View
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnVersion = new System.Windows.Forms.Button();
             this.flpEntry = new System.Windows.Forms.FlowLayoutPanel();
+            this.aideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nsFrmMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.panel1.SuspendLayout();
@@ -62,7 +58,6 @@ namespace NotePass.View
             // 
             this.nsFrmMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiFile,
-            this.tsmiModify,
             this.tsmiOrganize,
             this.aideToolStripMenuItem});
             this.nsFrmMain.Location = new System.Drawing.Point(0, 0);
@@ -103,37 +98,6 @@ namespace NotePass.View
             this.tsmiExit.Size = new System.Drawing.Size(180, 22);
             this.tsmiExit.Text = "&Quitter";
             // 
-            // tsmiModify
-            // 
-            this.tsmiModify.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiCopy,
-            this.tsmiCut,
-            this.tsmiPaste});
-            this.tsmiModify.Name = "tsmiModify";
-            this.tsmiModify.Size = new System.Drawing.Size(64, 20);
-            this.tsmiModify.Text = "&Modifier";
-            // 
-            // tsmiCopy
-            // 
-            this.tsmiCopy.Name = "tsmiCopy";
-            this.tsmiCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.tsmiCopy.Size = new System.Drawing.Size(180, 22);
-            this.tsmiCopy.Text = "Copier";
-            // 
-            // tsmiCut
-            // 
-            this.tsmiCut.Name = "tsmiCut";
-            this.tsmiCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.tsmiCut.Size = new System.Drawing.Size(180, 22);
-            this.tsmiCut.Text = "Couper";
-            // 
-            // tsmiPaste
-            // 
-            this.tsmiPaste.Name = "tsmiPaste";
-            this.tsmiPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.tsmiPaste.Size = new System.Drawing.Size(180, 22);
-            this.tsmiPaste.Text = "Coller";
-            // 
             // tsmiOrganize
             // 
             this.tsmiOrganize.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -165,7 +129,7 @@ namespace NotePass.View
             // 
             this.tsmiDateAsc.Image = global::NotePass.Properties.Resources.date_croissant;
             this.tsmiDateAsc.Name = "tsmiDateAsc";
-            this.tsmiDateAsc.Size = new System.Drawing.Size(180, 22);
+            this.tsmiDateAsc.Size = new System.Drawing.Size(167, 22);
             this.tsmiDateAsc.Text = "Ordre &croissant";
             this.tsmiDateAsc.Click += new System.EventHandler(this.tsmiDateAsc_Click);
             // 
@@ -173,15 +137,9 @@ namespace NotePass.View
             // 
             this.tsmiDateDesc.Image = global::NotePass.Properties.Resources.date_decroissant;
             this.tsmiDateDesc.Name = "tsmiDateDesc";
-            this.tsmiDateDesc.Size = new System.Drawing.Size(180, 22);
+            this.tsmiDateDesc.Size = new System.Drawing.Size(167, 22);
             this.tsmiDateDesc.Text = "Ordre décroi&ssant";
             this.tsmiDateDesc.Click += new System.EventHandler(this.tsmiDateDesc_Click);
-            // 
-            // aideToolStripMenuItem
-            // 
-            this.aideToolStripMenuItem.Name = "aideToolStripMenuItem";
-            this.aideToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.aideToolStripMenuItem.Text = "&Aide";
             // 
             // pbxLogo
             // 
@@ -292,6 +250,12 @@ namespace NotePass.View
             this.flpEntry.TabIndex = 2;
             this.flpEntry.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.flpEntry_ControlAdded);
             // 
+            // aideToolStripMenuItem
+            // 
+            this.aideToolStripMenuItem.Name = "aideToolStripMenuItem";
+            this.aideToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.aideToolStripMenuItem.Text = "&Aide";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -318,16 +282,11 @@ namespace NotePass.View
         private System.Windows.Forms.ToolStripMenuItem tsmiNew;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem tsmiExit;
-        private System.Windows.Forms.ToolStripMenuItem tsmiModify;
-        private System.Windows.Forms.ToolStripMenuItem tsmiCopy;
-        private System.Windows.Forms.ToolStripMenuItem tsmiCut;
-        private System.Windows.Forms.ToolStripMenuItem tsmiPaste;
         private System.Windows.Forms.ToolStripMenuItem tsmiOrganize;
         private System.Windows.Forms.ToolStripMenuItem tsmiAlphabeticalOrder;
         private System.Windows.Forms.ToolStripMenuItem tsmiDateAdded;
         private System.Windows.Forms.ToolStripMenuItem tsmiDateAsc;
         private System.Windows.Forms.ToolStripMenuItem tsmiDateDesc;
-        private System.Windows.Forms.ToolStripMenuItem aideToolStripMenuItem;
         private System.Windows.Forms.PictureBox pbxLogo;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Button btnHome;
@@ -337,5 +296,6 @@ namespace NotePass.View
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.FlowLayoutPanel flpEntry;
         private System.Windows.Forms.Button btnVersion;
+        private System.Windows.Forms.ToolStripMenuItem aideToolStripMenuItem;
     }
 }

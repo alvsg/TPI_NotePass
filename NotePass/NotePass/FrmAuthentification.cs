@@ -128,6 +128,7 @@ namespace NotePass
         {
             View.FrmForgottenPwd frmForgottenPwd = new View.FrmForgottenPwd(attempt);
             frmForgottenPwd.ShowDialog();
+            this.Close();
         }
     }
 }

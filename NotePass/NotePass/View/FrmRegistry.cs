@@ -22,33 +22,35 @@ namespace NotePass.View
         private Model.XmlFile xmlFile;
         private Model.Security secure;
         private UserInput userInput;
-        private List<string> lstAnswer;
         private bool visiblePwd, visiblePwdConf;
         private bool forgottenPwd;
-        private string _newPassword;
-
-        public string NewPassword { get => _newPassword; }
+        private string newPassword;
 
         /// <summary>
         /// Constructeur principal de la classe FrmRegistry
         /// </summary>
         /// <param name="isForgottenPwd">La booléen qui définit si le constructeur est appelé parce que l'tulisateur a oublié son mot de passe ou non</param>
-        public FrmRegistry(bool isForgottenPwd)
+        public FrmRegistry(bool isForgottenPwd, string password)
         {
             InitializeComponent();
 
-            xmlFile = new Model.XmlFile();
+            if (password != null)
+            {
+                newPassword = password;
+                xmlFile = new Model.XmlFile(newPassword, false);
+            }
+            else
+            {
+                xmlFile = new Model.XmlFile();
+            }
             secure = new Model.Security(xmlFile);
-            lstAnswer = new List<string>();
             userInput = new UserInput(cbxQuestion1, cbxQuestion2, cbxQuestion3);
             btnSave.Enabled = false;
             visiblePwd = false;
             visiblePwdConf = false;
             tbxPassowrd.PasswordChar = '*';
             tbxPasswordConf.PasswordChar = '*';
-            forgottenPwd = isForgottenPwd;
-
-        }
+            forgottenPwd = isForgottenPwd;        }
 
         /// <summary>
         /// Méthode qui permet de générer les questions pour les comboBox
@@ -180,17 +182,16 @@ namespace NotePass.View
             {
                 if (forgottenPwd)
                 {
-                    xmlFile.UpdatePassword(tbxPasswordConf.Text);
-                    _newPassword = tbxPasswordConf.Text;
+                    xmlFile.UpdatePassword(tbxPasswordConf.Text, xmlFile.LstAnswer);
+                    xmlFile.UpdateDataInXml(0, "NotePass", tbxPasswordConf.Text, "", "", false);
                 }
                 else if(!forgottenPwd)
                 {
                     xmlFile.CreateDataXmlFile(0, "NotePass", tbxPasswordConf.Text, "", "", false);
-                    lstAnswer.Add(tbxQuestion1Answer.Text);
-                    lstAnswer.Add(tbxQuestion2Answer.Text);
-                    lstAnswer.Add(tbxQuestion3Answer.Text);
-                    Model.Entry entry = new Model.Entry(lstAnswer);
-                    xmlFile.CreateForgottenPwdXmlFile(cbxQuestion1.SelectedIndex, cbxQuestion2.SelectedIndex, cbxQuestion3.SelectedIndex, tbxPasswordConf.Text, entry.LstAnswer);
+                    xmlFile.LstAnswer.Add(tbxQuestion1Answer.Text);
+                    xmlFile.LstAnswer.Add(tbxQuestion2Answer.Text);
+                    xmlFile.LstAnswer.Add(tbxQuestion3Answer.Text);
+                    xmlFile.CreateForgottenPwdXmlFile(cbxQuestion1.SelectedIndex, cbxQuestion2.SelectedIndex, cbxQuestion3.SelectedIndex, tbxPasswordConf.Text);
                 }
                 CloseThis();
             }

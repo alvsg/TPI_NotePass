@@ -14,7 +14,6 @@ namespace NotePass.View
     {
         private List<int> lstAlreadySelected;
         private UserInput userInput;
-        private Model.Security secure;
         private Model.XmlFile xmlFile;
         private int authentificationAttempts;
         private int attempt;
@@ -25,21 +24,20 @@ namespace NotePass.View
             lstAlreadySelected = new List<int>();
             userInput = new UserInput(cbxQuestion);
             xmlFile = new Model.XmlFile();
-            secure = new Model.Security(xmlFile);
             authentificationAttempts = attempts;
             attempt = 0;
         }
 
         private void cbxQuestion_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cbxQuestion.SelectedIndex > -1)
+            if (cbxQuestion.SelectedIndex > -1)
             {
                 tbxReply.Enabled = true;
             }
 
             if (lstAlreadySelected.Contains(cbxQuestion.SelectedIndex))
             {
-                if(lstAlreadySelected.Count != 3)
+                if (lstAlreadySelected.Count != 3)
                 {
                     pbxMessage.Visible = true;
                     lblMessage.Text = "Veuillez choisir une autre question !";
@@ -63,20 +61,20 @@ namespace NotePass.View
             }
         }
 
-        private void ChangePassword()
+        private void ChangePassword(string oldPassword)
         {
             this.Hide();
-            FrmRegistry frmRegistry = new FrmRegistry(true);
+            FrmRegistry frmRegistry = new FrmRegistry(true, oldPassword);
             frmRegistry.ShowDialog();
             this.Close();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            bool itIsRight = xmlFile.VerifyIfResponseIfRight(cbxQuestion.SelectedIndex, tbxReply.Text, cbxQuestion);
-            if (itIsRight)
+            string itIsRight = xmlFile.VerifyIfResponseIfRight(cbxQuestion.SelectedIndex, tbxReply.Text, cbxQuestion);
+            if (itIsRight != null)
             {
-                ChangePassword();
+                ChangePassword(itIsRight);
             }
             else
             {

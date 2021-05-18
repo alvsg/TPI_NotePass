@@ -32,7 +32,7 @@ namespace NotePass.View
         public UserInput(ComboBox cbxQuestions4) : this()
         {
             xmlFile = new Model.XmlFile();
-            lstSelectedQuestions = xmlFile.GetIndexQuestions();
+            lstSelectedQuestions = xmlFile.GetIndexQuestions(null);
             cbxQuestions4.Tag = lstSelectedQuestions;
             GenerateQuestionFromIndex(cbxQuestions4);
         }
@@ -205,7 +205,7 @@ namespace NotePass.View
         {
             if (!IsStillAttempting(attempt, lblMessage, form) && attempt > MAX_ATTEMPTS)
             {
-                if(authentificationAttempt > MAX_ATTEMPTS)
+                if (authentificationAttempt > MAX_ATTEMPTS)
                 {
                     lblMessage.Text = "Vous n'avez plus de tentatives !";
                 }

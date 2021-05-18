@@ -26,7 +26,7 @@ namespace NotePass.View
         {
             InitializeComponent();
             _key = password;
-            xmlFile = new Model.XmlFile();
+            xmlFile = new Model.XmlFile(password, true);
             secure = new Model.Security(xmlFile);
             safe = new Model.Safe(this);
             userInput = new UserInput();
@@ -42,7 +42,7 @@ namespace NotePass.View
 
         private void flpEntry_ControlAdded(object sender, ControlEventArgs e)
         {
-            if(safe.LstEntry.Count > safe.NoData)
+            if (safe.LstEntry.Count > safe.NoData)
             {
                 secure.ActionOnFileContent(_key, safe);
                 safe.NoData = safe.LstEntry.Count;

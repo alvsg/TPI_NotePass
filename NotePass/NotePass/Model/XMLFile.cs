@@ -18,13 +18,14 @@ namespace NotePass.Model
 {
     class XmlFile
     {
-        private string usernameWindows, dirPath, fileDataXml, fileForgottenPwd, _dataFilePath, _forgottenpwdFilePath;
-        private List<string> _lstAwnser;
+        private string usernameWindows, dirPath, fileDataXml, fileForgottenPwd, _dataFilePath, _forgottenpwdFilePath, _oldPassword;
+        private List<string> _lstAnswer;
         private Security secure;
         private XDocument xDocument;
 
         public string DataFilePath { get => _dataFilePath; }
         public string ForgottenpwdFilePath { get => _forgottenpwdFilePath; }
+        public List<string> LstAnswer { get => _lstAnswer; set => _lstAnswer = value; }
 
         /// <summary>
         /// Constructeur principal de la classe XmlFile
@@ -41,12 +42,21 @@ namespace NotePass.Model
             dirPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + "/data/";
             _dataFilePath = dirPath + fileDataXml;
             _forgottenpwdFilePath = dirPath + fileForgottenPwd;
+            _lstAnswer = new List<string>();
             secure = new Security(this);
         }
 
-        public XmlFile(List<string> answers) : this()
+        public XmlFile(string passwordOf, bool isEncrypt) : this()
         {
-            _lstAwnser = answers;
+            if (isEncrypt)
+            {
+                secure.ActionOnFile(false, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
+            }
+            GetAllResponse(passwordOf);
+            if (isEncrypt)
+            {
+                secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
+            }
         }
 
         /// <summary>
@@ -60,7 +70,7 @@ namespace NotePass.Model
             // Boucle qui vérifie que le résultat correct
             if (!exist)
             {
-                View.FrmRegistry frmRegistry = new View.FrmRegistry(false);
+                View.FrmRegistry frmRegistry = new View.FrmRegistry(false, null);
                 frmRegistry.ShowDialog();
                 frmAuthentification.Close();
             }
@@ -131,20 +141,23 @@ namespace NotePass.Model
             xDocument.Save(_dataFilePath);
         }
 
-        public void CreateForgottenPwdXmlFile(int Question1, int Question2, int Question3, string password, List<string> answers)
+        public void CreateForgottenPwdXmlFile(int Question1, int Question2, int Question3, string password)
         {
-            _lstAwnser = answers;
-            string passwordOfQ1 = secure.ActionOnString(true, password, _lstAwnser[0]);
-            string passwordOfQ2 = secure.ActionOnString(true, password, _lstAwnser[1]);
-            string passwordOfQ3 = secure.ActionOnString(true, password, _lstAwnser[2]);
+            string passwordOfQ1 = secure.ActionOnString(true, password, _lstAnswer[0]);
+            string passwordOfQ2 = secure.ActionOnString(true, password, _lstAnswer[1]);
+            string passwordOfQ3 = secure.ActionOnString(true, password, _lstAnswer[2]);
+
+            string responseOfQ1 = secure.ActionOnString(true, _lstAnswer[0], password);
+            string responseOfQ2 = secure.ActionOnString(true, _lstAnswer[1], password);
+            string responseOfQ3 = secure.ActionOnString(true, _lstAnswer[2], password);
 
             string textInFile = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + Environment.NewLine + "<questions>" + Environment.NewLine + "</questions>";
             File.WriteAllText(_forgottenpwdFilePath, textInFile);
-            InsertQuestionsInto(Question1, Question2, Question3, passwordOfQ1, passwordOfQ2, passwordOfQ3);
+            InsertQuestionsInto(Question1, Question2, Question3, passwordOfQ1, passwordOfQ2, passwordOfQ3, responseOfQ1, responseOfQ2, responseOfQ3);
             secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
         }
 
-        private void InsertQuestionsInto(int Question1, int Question2, int Question3, string passwordOfQ1, string passwordOfQ2, string passwordOfQ3)
+        private void InsertQuestionsInto(int Question1, int Question2, int Question3, string passwordOfQ1, string passwordOfQ2, string passwordOfQ3, string responseOfQ1, string responseOfQ2, string responseOfQ3)
         {
             xDocument = XDocument.Load(_forgottenpwdFilePath);
 
@@ -152,16 +165,27 @@ namespace NotePass.Model
             XElement secondQuestion = new XElement("question", passwordOfQ2);
             XElement thirdQuestion = new XElement("question", passwordOfQ3);
 
+            XElement firstResponse = new XElement("response", responseOfQ1);
+            XElement secondResponse = new XElement("response", responseOfQ2);
+            XElement thirdResponse = new XElement("response", responseOfQ3);
+
 
             firstQuestion.SetAttributeValue("id", Question1);
-            secondQuestion.SetAttributeValue("id", Question2);
-            thirdQuestion.SetAttributeValue("id", Question3);
+            firstResponse.SetAttributeValue("id", Question1);
+            xDocument.Root.Add(firstQuestion, firstResponse);
 
-            xDocument.Root.Add(firstQuestion, secondQuestion, thirdQuestion);
+            secondQuestion.SetAttributeValue("id", Question2);
+            secondResponse.SetAttributeValue("id", Question1);
+            xDocument.Root.Add(secondQuestion, secondResponse);
+
+            thirdQuestion.SetAttributeValue("id", Question3);
+            thirdResponse.SetAttributeValue("id", Question1);
+            xDocument.Root.Add(thirdQuestion, thirdResponse);
+
             xDocument.Save(_forgottenpwdFilePath);
         }
 
-        public List<int> GetIndexQuestions()
+        public List<int> GetIndexQuestions(List<string> answers)
         {
             List<int> question = new List<int>();
 
@@ -169,7 +193,10 @@ namespace NotePass.Model
             xDocument = XDocument.Load(_forgottenpwdFilePath);
             foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
             {
-                question.Add(Convert.ToInt32(element.Attribute("id").Value));
+                if (element.Name == "question")
+                {
+                    question.Add(Convert.ToInt32(element.Attribute("id").Value));
+                }
             }
             secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
 
@@ -256,7 +283,7 @@ namespace NotePass.Model
             return favorites;
         }
 
-        public bool VerifyIfResponseIfRight(int selectedQuestion, string response, ComboBox comboBox)
+        public string VerifyIfResponseIfRight(int selectedQuestion, string response, ComboBox comboBox)
         {
             string password = "";
             secure.ActionOnFile(false, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
@@ -265,35 +292,90 @@ namespace NotePass.Model
 
             foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
             {
-                if (Convert.ToInt32(element.Attribute("id").Value) == lstSelectedQuestion[selectedQuestion])
+                if (element.Name == "question")
                 {
-                    password = secure.ActionOnString(false, element.Value, response);
-                    if(password != null)
+                    if (Convert.ToInt32(element.Attribute("id").Value) == lstSelectedQuestion[selectedQuestion])
                     {
-                        secure.ActionOnFile(false, password, "writing", _dataFilePath);
-                    }
-
-                    if (secure.Error != null)
-                    {
-                        return false;
+                        password = secure.ActionOnString(false, element.Value, response);
+                        if (password != null)
+                        {
+                            secure.ActionOnFile(false, password, "writing", _dataFilePath);
+                            if (secure.Error == null)
+                            {
+                                return password;
+                            }
+                        }
                     }
                 }
             }
-            return true;
+            return null;
         }
 
-        public void UpdatePassword(string newPassword)
+        public void UpdatePassword(string newPassword, List<string> answers)
         {
+            if (answers != null)
+            {
+                _lstAnswer = answers;
+            }
+
             xDocument = XDocument.Load(_forgottenpwdFilePath);
+            List<int> idQuestion = GetSelectedQuestion();
             foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
             {
-                foreach(string answer in _lstAwnser)
+                if ((int)element.Attribute("id") == idQuestion[0])
                 {
-                    element.Value = secure.ActionOnString(true, newPassword, answer);
+                    UpdateData(element, newPassword, idQuestion.IndexOf((int)element.Attribute("id")));
+                }
+                else if ((int)element.Attribute("id") == idQuestion[1])
+                {
+                    UpdateData(element, newPassword, idQuestion.IndexOf((int)element.Attribute("id")));
+                }
+                else if ((int)element.Attribute("id") == idQuestion[2])
+                {
+                    UpdateData(element, newPassword, idQuestion.IndexOf((int)element.Attribute("id")));
                 }
             }
             xDocument.Save(_forgottenpwdFilePath);
             secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
+        }
+
+        private void GetAllResponse(string password)
+        {
+            xDocument = XDocument.Load(_forgottenpwdFilePath);
+            foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
+            {
+                if (element.Name == "response")
+                {
+                    string response = secure.ActionOnString(false, element.Value, password);
+                    _lstAnswer.Add(response);
+                }
+            }
+        }
+
+        private List<int> GetSelectedQuestion()
+        {
+            List<int> idQuestion = new List<int>();
+            foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
+            {
+                if (element.Name == "question")
+                {
+                    idQuestion.Add(Convert.ToInt32(element.Attribute("id").Value));
+                }
+            }
+            return idQuestion;
+        }
+
+        private void UpdateData(XElement element, string newPassword, int index)
+        {
+            switch (element.Name.ToString())
+            {
+                case "question":
+                    element.Value = secure.ActionOnString(true, newPassword, _lstAnswer[index]);
+                    break;
+                case "response":
+                    element.Value = secure.ActionOnString(true, _lstAnswer[index], newPassword);
+                    break;
+            }
         }
     }
 }

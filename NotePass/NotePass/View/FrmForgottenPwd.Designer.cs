@@ -143,6 +143,7 @@ namespace NotePass.View
             // 
             // cbxQuestion
             // 
+            this.cbxQuestion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxQuestion.FormattingEnabled = true;
             this.cbxQuestion.Location = new System.Drawing.Point(119, 26);
             this.cbxQuestion.Name = "cbxQuestion";

@@ -9,7 +9,6 @@ namespace NotePass.Model
     public class Entry
     {
         private string _name, _url, _password, _username, _favorites;
-        private List<string> _lstAnswer;
         private DateTime _date;
 
         public string Name { get => _name; set => _name = value; }
@@ -18,7 +17,6 @@ namespace NotePass.Model
         public string Username { get => _username; set => _username = value; }
         public string Favorites { get => _favorites; set => _favorites = value; }
         public DateTime Date { get => _date; set => _date = value; }
-        public List<string> LstAnswer { get => _lstAnswer; }
 
         public Entry(string nameOf, string urlOf, string passwordOf, string usernameOf, DateTime date, string favoritesOf)
         {
@@ -37,11 +35,6 @@ namespace NotePass.Model
             _password = passwordOf;
             _username = usernameOf;
             _favorites = favoritesOf;
-        }
-
-        public Entry(List<string> answers)
-        {
-            _lstAnswer = answers;
         }
     }
 }

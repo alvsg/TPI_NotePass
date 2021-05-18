@@ -187,6 +187,7 @@ namespace NotePass.View
             // 
             // cbxQuestion3
             // 
+            this.cbxQuestion3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxQuestion3.FormattingEnabled = true;
             this.cbxQuestion3.Location = new System.Drawing.Point(106, 132);
             this.cbxQuestion3.Name = "cbxQuestion3";
@@ -224,6 +225,7 @@ namespace NotePass.View
             // 
             // cbxQuestion2
             // 
+            this.cbxQuestion2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxQuestion2.FormattingEnabled = true;
             this.cbxQuestion2.Location = new System.Drawing.Point(107, 78);
             this.cbxQuestion2.Name = "cbxQuestion2";
@@ -261,6 +263,7 @@ namespace NotePass.View
             // 
             // cbxQuestion1
             // 
+            this.cbxQuestion1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxQuestion1.Location = new System.Drawing.Point(107, 24);
             this.cbxQuestion1.Name = "cbxQuestion1";
             this.cbxQuestion1.Size = new System.Drawing.Size(329, 22);
