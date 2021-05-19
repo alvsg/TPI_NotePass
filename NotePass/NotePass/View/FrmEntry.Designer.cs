@@ -277,7 +277,7 @@ namespace NotePass.View
             // 
             // pbxMessage
             // 
-            this.pbxMessage.Image = global::NotePass.Properties.Resources.danger1;
+            this.pbxMessage.Image = global::NotePass.Properties.Resources.danger;
             this.pbxMessage.Location = new System.Drawing.Point(15, 348);
             this.pbxMessage.Name = "pbxMessage";
             this.pbxMessage.Size = new System.Drawing.Size(30, 30);
@@ -310,6 +310,7 @@ namespace NotePass.View
             this.Controls.Add(this.gbxNewEntry);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.pbxLogo);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FrmEntry";

@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="NotePass.FrmAuthentification">
+    <Position X="12.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>gAQAYAgIAKAACAAAEACAAAgCBIEAAgCQAAAAAAgBAAA=</HashCode>
+      <FileName>FrmAuthentification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.Program" Collapsed="true">
+    <Position X="19.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.Model.Entry" Collapsed="true">
+    <Position X="20.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAIAAAAAAAAAAABQAAAAQAAAQAAAADCEKAAAAAAAA=</HashCode>
+      <FileName>Model\Entry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.Model.Safe" Collapsed="true">
+    <Position X="20.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BABCiQEQwAAAAAAEIIABAAgCAAAIUAgAAIAQEQIAAAA=</HashCode>
+      <FileName>Model\Safe.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.Model.Security" Collapsed="true">
+    <Position X="20.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AUAQAAAASAAGQQEAIAAAIAgAAAAAIAAAAAAADAAAEAA=</HashCode>
+      <FileName>Model\Security.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.Model.XmlFile" Collapsed="true">
+    <Position X="20.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CQCBpAAAEBAAFAgAAkAAJAAARAAEEEAAAUGhAAYAAAI=</HashCode>
+      <FileName>Model\XmlFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.Properties.Resources" Collapsed="true">
+    <Position X="19.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAACAAAgAAhEAEAAwQAAAACEAJgAQAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.Properties.Settings" Collapsed="true">
+    <Position X="19.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.View.FrmEntry">
+    <Position X="3.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>gAFA5ghGACBIAQAQgQCBAAoCAMAAIMAUKgBoQAApAAA=</HashCode>
+      <FileName>View\FrmEntry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.View.FrmForgottenPwd">
+    <Position X="0.5" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>ABAAQAgAAKAAgAEAACCBAAgCCIAAkAAQAAAAAAAhQEI=</HashCode>
+      <FileName>View\FrmForgottenPwd.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.View.FrmMain">
+    <Position X="9.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>BRQMYIFAgCCAgAQAMACAEAgKICAIgAAQAABAASkBAAI=</HashCode>
+      <FileName>View\FrmMain.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.View.FrmRegistry">
+    <Position X="6.25" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>gATgYAgAAjBAgQEQAACBAA4OCNAAEBAQAiAAAgKBCIA=</HashCode>
+      <FileName>View\FrmRegistry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotePass.View.UserInput">
+    <Position X="0.5" Y="6.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AgEABAACAAIAAAgAAAIgAAgIABAABAAAEBQAAAACBAA=</HashCode>
+      <FileName>View\UserInput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

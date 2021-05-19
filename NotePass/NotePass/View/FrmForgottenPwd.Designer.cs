@@ -29,6 +29,7 @@ namespace NotePass.View
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmForgottenPwd));
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblDescription = new System.Windows.Forms.Label();
@@ -54,7 +55,7 @@ namespace NotePass.View
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(113, 24);
             this.btnAdd.TabIndex = 18;
-            this.btnAdd.Text = "Ajouter";
+            this.btnAdd.Text = "Envoyer";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
@@ -153,7 +154,7 @@ namespace NotePass.View
             // 
             // pbxMessage
             // 
-            this.pbxMessage.Image = global::NotePass.Properties.Resources.danger1;
+            this.pbxMessage.Image = global::NotePass.Properties.Resources.danger;
             this.pbxMessage.Location = new System.Drawing.Point(13, 216);
             this.pbxMessage.Name = "pbxMessage";
             this.pbxMessage.Size = new System.Drawing.Size(30, 30);
@@ -186,6 +187,9 @@ namespace NotePass.View
             this.Controls.Add(this.gbxForgottenPwd);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.pbxLogo);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FrmForgottenPwd";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmForgottenPwd";

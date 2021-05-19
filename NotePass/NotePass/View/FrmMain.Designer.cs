@@ -29,6 +29,7 @@ namespace NotePass.View
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.nsFrmMain = new System.Windows.Forms.MenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,6 +40,7 @@ namespace NotePass.View
             this.tsmiDateAdded = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDateAsc = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDateDesc = new System.Windows.Forms.ToolStripMenuItem();
+            this.aideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.btnHome = new System.Windows.Forms.Button();
@@ -48,7 +50,6 @@ namespace NotePass.View
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnVersion = new System.Windows.Forms.Button();
             this.flpEntry = new System.Windows.Forms.FlowLayoutPanel();
-            this.aideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nsFrmMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.panel1.SuspendLayout();
@@ -81,21 +82,21 @@ namespace NotePass.View
             this.tsmiNew.Image = global::NotePass.Properties.Resources.ajouter_entree;
             this.tsmiNew.Name = "tsmiNew";
             this.tsmiNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.tsmiNew.Size = new System.Drawing.Size(180, 22);
+            this.tsmiNew.Size = new System.Drawing.Size(165, 22);
             this.tsmiNew.Text = "&Nouveau";
             this.tsmiNew.Click += new System.EventHandler(this.tsmiNew_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(162, 6);
             // 
             // tsmiExit
             // 
             this.tsmiExit.Image = global::NotePass.Properties.Resources.fermer;
             this.tsmiExit.Name = "tsmiExit";
             this.tsmiExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.tsmiExit.Size = new System.Drawing.Size(180, 22);
+            this.tsmiExit.Size = new System.Drawing.Size(165, 22);
             this.tsmiExit.Text = "&Quitter";
             // 
             // tsmiOrganize
@@ -111,7 +112,7 @@ namespace NotePass.View
             // 
             this.tsmiAlphabeticalOrder.Image = global::NotePass.Properties.Resources.ordre_aphabetique;
             this.tsmiAlphabeticalOrder.Name = "tsmiAlphabeticalOrder";
-            this.tsmiAlphabeticalOrder.Size = new System.Drawing.Size(180, 22);
+            this.tsmiAlphabeticalOrder.Size = new System.Drawing.Size(176, 22);
             this.tsmiAlphabeticalOrder.Text = "Ordre a&lphabétique";
             this.tsmiAlphabeticalOrder.Click += new System.EventHandler(this.tsmiAlphabeticalOrder_Click);
             // 
@@ -122,7 +123,7 @@ namespace NotePass.View
             this.tsmiDateDesc});
             this.tsmiDateAdded.Image = global::NotePass.Properties.Resources.date;
             this.tsmiDateAdded.Name = "tsmiDateAdded";
-            this.tsmiDateAdded.Size = new System.Drawing.Size(180, 22);
+            this.tsmiDateAdded.Size = new System.Drawing.Size(176, 22);
             this.tsmiDateAdded.Text = "&Date d\'ajout";
             // 
             // tsmiDateAsc
@@ -140,6 +141,12 @@ namespace NotePass.View
             this.tsmiDateDesc.Size = new System.Drawing.Size(167, 22);
             this.tsmiDateDesc.Text = "Ordre décroi&ssant";
             this.tsmiDateDesc.Click += new System.EventHandler(this.tsmiDateDesc_Click);
+            // 
+            // aideToolStripMenuItem
+            // 
+            this.aideToolStripMenuItem.Name = "aideToolStripMenuItem";
+            this.aideToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.aideToolStripMenuItem.Text = "&Aide";
             // 
             // pbxLogo
             // 
@@ -250,12 +257,6 @@ namespace NotePass.View
             this.flpEntry.TabIndex = 2;
             this.flpEntry.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.flpEntry_ControlAdded);
             // 
-            // aideToolStripMenuItem
-            // 
-            this.aideToolStripMenuItem.Name = "aideToolStripMenuItem";
-            this.aideToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.aideToolStripMenuItem.Text = "&Aide";
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -264,6 +265,9 @@ namespace NotePass.View
             this.Controls.Add(this.flpEntry);
             this.Controls.Add(this.nsFrmMain);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FrmMain";
             this.Text = "FrmMain";
             this.Load += new System.EventHandler(this.FrmMain_Load);

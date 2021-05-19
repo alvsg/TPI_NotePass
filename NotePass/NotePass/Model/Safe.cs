@@ -7,7 +7,7 @@ using System.Windows.Forms; //Directive ajouté manuellement
 
 namespace NotePass.Model
 {
-    class Safe
+    public class Safe
     {
         private List<Entry> _lstEntry, _lstFavorites;
         private Entry _newEntry;
@@ -32,6 +32,7 @@ namespace NotePass.Model
         {
             frmMain = formMain;
             xmlFile = new XmlFile();
+            _lstEntry = new List<Entry>();
             _lstEntry = xmlFile.GetDataInArray();
             _noData = _lstEntry.Count;
             _addedInXmlFile = new List<int>();

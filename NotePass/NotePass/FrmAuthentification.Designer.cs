@@ -109,7 +109,7 @@ namespace NotePass
             // 
             // pbxMessage
             // 
-            this.pbxMessage.Image = global::NotePass.Properties.Resources.danger1;
+            this.pbxMessage.Image = global::NotePass.Properties.Resources.danger;
             this.pbxMessage.Location = new System.Drawing.Point(12, 158);
             this.pbxMessage.Name = "pbxMessage";
             this.pbxMessage.Size = new System.Drawing.Size(30, 30);

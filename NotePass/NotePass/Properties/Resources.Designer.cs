@@ -63,16 +63,6 @@ namespace NotePass.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap aide {
-            get {
-                object obj = ResourceManager.GetObject("aide", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap ajouter_entree {
             get {
                 object obj = ResourceManager.GetObject("ajouter_entree", resourceCulture);
@@ -106,16 +96,6 @@ namespace NotePass.Properties {
         internal static System.Drawing.Bitmap danger {
             get {
                 object obj = ResourceManager.GetObject("danger", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap danger1 {
-            get {
-                object obj = ResourceManager.GetObject("danger1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

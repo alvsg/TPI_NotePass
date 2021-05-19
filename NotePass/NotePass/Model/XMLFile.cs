@@ -64,7 +64,7 @@ namespace NotePass.Model
         ///     Si oui, le fichier xml est crée et le formulaire de création s'affiche 
         /// </summary>
         /// <param name="frmAuthentification">Le formulaire d'authentification</param>
-        public void VerifyIfFirstOpen(FrmAuthentification frmAuthentification, List<string> answers)
+        public void VerifyIfFirstOpen(FrmAuthentification frmAuthentification)
         {
             bool exist = VerifyIfExist();
             // Boucle qui vérifie que le résultat correct

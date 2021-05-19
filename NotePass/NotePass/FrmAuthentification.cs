@@ -1,7 +1,7 @@
 ﻿/*
  * PROJET : NotePass - Gestionnaire de mot de passe
  * AUTEUR : ALVES GUASTTI Letitia (I.FA-P3A)
- * DESC.: Permet a l'utilisateur de s'authentifié pour accéder à l'application
+ * DESC.: Cette classe permet à l'utilisateur de s'authentifier pour accéder à l'application
  * VERSION : 04.05.2021 v.1
  */
 
@@ -17,35 +17,40 @@ using System.Windows.Forms;
 
 namespace NotePass
 {
+    /// <summary>
+    /// Vue principale qui permet de s'authentifier pour accéder à l'application
+    /// </summary>
     public partial class FrmAuthentification : Form
     {
+        #region Déclaration des variables
+
         private Model.XmlFile xmlFile;
         private Model.Security secure;
         private View.UserInput userInput;
-        private List<string> _lstAnswer;
+        /// <summary>
+        /// Nombre de tentatives
+        /// </summary>
         private int attempt;
 
-        public List<string> LstAnswer { get => _lstAnswer; set => _lstAnswer = value; }
+        #endregion
 
         public FrmAuthentification()
         {
             InitializeComponent();
             xmlFile = new Model.XmlFile();
-            _lstAnswer = new List<string>();
             secure = new Model.Security(xmlFile);
             userInput = new View.UserInput();
             attempt = 0;
         }
 
         /// <summary>
-        /// Méthode qui permet lors de l'initialisation de la fenêtre d'authentification de vérifier si l'utlisateur ouvre l'application pour la première fois
-        ///     Si oui, ouvre la fenêtre de création
+        /// Méthode qui permet lors de l'initialisation de la fenêtre d'authentification de vérifier si l'utilisateur ouvre l'application pour la première fois
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void FrmAuthentification_Load(object sender, EventArgs e)
         {
-            xmlFile.VerifyIfFirstOpen(this, _lstAnswer);
+            xmlFile.VerifyIfFirstOpen(this);
         }
 
         /// <summary>
@@ -70,7 +75,7 @@ namespace NotePass
         /// <param name="e"></param>
         private void btnEnter_Click(object sender, EventArgs e)
         {
-            // Boucle qui vérifie que le contenu du champs texte soit correct ou non vide
+            // Boucle qui vérifie que le contenu du champ texte soit correcte ou non-vide
             if (!string.IsNullOrWhiteSpace(tbxPassword.Text))
             {
                 secure.ActionOnFile(false, tbxPassword.Text, "data", xmlFile.DataFilePath);
@@ -102,13 +107,13 @@ namespace NotePass
         }
 
         /// <summary>
-        /// Méthode qui permet de rentre le bouton de connexion actif lorsque le champs n'est plus vide
+        /// Méthode qui permet de rendre le bouton de connexion actif lorsque le champ n'est plus vide
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void tbxPassword_TextChanged(object sender, EventArgs e)
         {
-            // Boucle qui vérifie que le contenu du champs texte soit correct ou non vide
+            // Boucle qui vérifie que le contenu du champ texte soit correcte ou non-vide
             if (!string.IsNullOrWhiteSpace(tbxPassword.Text))
             {
                 btnEnter.Enabled = true;
@@ -120,7 +125,7 @@ namespace NotePass
         }
 
         /// <summary>
-        /// Méthode qui permet de redirigé l'utilisateur sur la fenêtre du mot de passe oublié
+        /// Méthode qui permet de rediriger l'utilisateur sur la fenêtre du mot de passe oublié
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
