@@ -13,31 +13,50 @@ using System.Security.Cryptography; //Directive ajouté manuellement
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms; //Directive ajouté manuellement
+using System.Xml.Linq;
 
 namespace NotePass.Model
 {
-    class Security
+    /// <summary>
+    /// Modèle qui permet de gérer toute la partie sécurité de l'application
+    /// </summary>
+    public class Security
     {
+        #region Déclaration des valeurs 
+
         //Permet de supprimer la clé de la mémoire après utilisation
         [DllImport("KERNEL32.DLL", EntryPoint = "RtlZeroMemory")]
         public static extern bool ZeroMemory(IntPtr Destination, int Length);
 
-        static byte[] salt;
+
+        private static byte[] salt;
         private string _error;
-        private XmlFile xmlFile;
+        public XmlFile xmlFile;
         private string _stringEncryptPwd;
 
+        #endregion
+        
+        /// <summary>
+        /// Texte de l'erreur
+        /// </summary>
         public string Error { get => _error; }
+        /// <summary>
+        /// Texte qui est un mot de passe
+        /// </summary>
         public string StringEncryptPwd { get => _stringEncryptPwd; }
 
         /// <summary>
-        /// Constructeur principal de la classe Securtiy
+        /// Consteucteur qui récupère le modèle XmlFile en paramètre
         /// </summary>
+        /// <param name="file">Le modèle XmlFile</param>
         public Security(XmlFile file) : this()
         {
             xmlFile = file;
         }
 
+        /// <summary>
+        /// Constructeur qui permet de générer un sel et un mot de passe en dur
+        /// </summary>
         public Security()
         {
             salt = GenerateRandomSalt();
@@ -66,9 +85,10 @@ namespace NotePass.Model
         /// <summary>
         /// Méthode qui permet de définir si le fichier xml doit être chiffré ou de déchiffré
         /// </summary>
-        /// <param name="encrypt">Indique que le fichier doit être chiffrer ou non</param>
-        /// <param name="password">Le mot de passe utilisateur</param>
-        /// <param name="inProgress">L'action en cours</param>
+        /// <param name="encrypt">Booléen qui indique si le fichier est chiffré</param>
+        /// <param name="password">Mot de passe de l'application</param>
+        /// <param name="inProgress">L'action en cours sur le fichier</param>
+        /// <param name="filePath">L'emplacement du fichier</param>
         public void ActionOnFile(bool encrypt, string password, string inProgress, string filePath)
         {
             _error = null;
@@ -80,19 +100,20 @@ namespace NotePass.Model
             if (encrypt)
             {
                 FileEncrypt(filePath, password);
-                xmlFile.IfCopyExist(filePath);
+                IfCopyExist(filePath);
             }
             else
             {
                 string filePathAES = filePath + ".aes";
                 FileDecrypt(filePathAES, filePath, password);
+                // Boucle qui vérifie si il y a un erreur
                 if (_error == null)
                 {
-                    xmlFile.IfCopyExist(filePathAES);
+                    IfCopyExist(filePathAES);
                 }
                 else
                 {
-                    xmlFile.IfCopyExist(filePath);
+                    IfCopyExist(filePath);
                 }
             }
 
@@ -222,7 +243,7 @@ namespace NotePass.Model
         /// <summary>
         /// Méthode qui permet de générer un mot de passe aléatoirement
         /// </summary>
-        /// <returns>LE mot de passe généré</returns>
+        /// <returns>Le mot de passe généré</returns>
         private string GenerateRandomPwd()
         {
             string characters = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ";
@@ -269,6 +290,13 @@ namespace NotePass.Model
             return new string(arrayChar);
         }
 
+        /// <summary>
+        /// Méthode qui permet de définir l'action de chiffrer ou de déchiffrer sur un texte 
+        /// </summary>
+        /// <param name="encrypt">Booléen qui indique si le texte doit être chiffré</param>
+        /// <param name="text">Le texte</param>
+        /// <param name="key">La clé de chiffrement/déchiffrement</param>
+        /// <returns>Le texte chiffré ou déchiffré</returns>
         public string ActionOnString(bool encrypt, string text, string key)
         {
             // Boucle qui vérifie si le texte doit être chiffré ou déchiffré
@@ -282,27 +310,48 @@ namespace NotePass.Model
             }
         }
 
-        // http://curlybrackets.com/posts/43017/how-to-encrypt-and-decrypt-a-string-in-c-sharp (for both)
+        /// <summary>
+        /// Méthode qui permet de chiffrer un texte
+        /// http://curlybrackets.com/posts/43017/how-to-encrypt-and-decrypt-a-string-in-c-sharp
+        /// </summary>
+        /// <param name="text">Le texte</param>
+        /// <param name="key">La clé de chiffrement</param>
+        /// <returns>Le texte chiffré</returns>
         private string EncryptString(string text, string key)
         {
-            using (var md5 = new MD5CryptoServiceProvider())
+            try
             {
-                using (var tdes = new TripleDESCryptoServiceProvider())
+                using (var md5 = new MD5CryptoServiceProvider())
                 {
-                    tdes.Key = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
-                    tdes.Mode = CipherMode.ECB;
-                    tdes.Padding = PaddingMode.PKCS7;
-
-                    using (var transform = tdes.CreateEncryptor())
+                    using (var tdes = new TripleDESCryptoServiceProvider())
                     {
-                        byte[] textBytes = UTF8Encoding.UTF8.GetBytes(text);
-                        byte[] bytes = transform.TransformFinalBlock(textBytes, 0, textBytes.Length);
-                        return Convert.ToBase64String(bytes, 0, bytes.Length);
+                        tdes.Key = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
+                        tdes.Mode = CipherMode.ECB;
+                        tdes.Padding = PaddingMode.PKCS7;
+
+                        using (var transform = tdes.CreateEncryptor())
+                        {
+                            byte[] textBytes = UTF8Encoding.UTF8.GetBytes(text);
+                            byte[] bytes = transform.TransformFinalBlock(textBytes, 0, textBytes.Length);
+                            return Convert.ToBase64String(bytes, 0, bytes.Length);
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                _error = "Error : " + ex.ToString();
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Méthode qui permet de déchiffrer un texte
+        /// http://curlybrackets.com/posts/43017/how-to-encrypt-and-decrypt-a-string-in-c-sharp
+        /// </summary>
+        /// <param name="cipher">Le texte chiffré</param>
+        /// <param name="key">La clé de déchiffrement</param>
+        /// <returns>Le texte déchiffré</returns>
         private string DecryptString(string cipher, string key)
         {
             try
@@ -331,6 +380,11 @@ namespace NotePass.Model
             }
         }
 
+        /// <summary>
+        /// Méthode qui permet de générer un mot de passe aléatoirement dans des TextBox
+        /// </summary>
+        /// <param name="cbxRandomPwd">La case à coché</param>
+        /// <param name="gbxPassword">Le groupe de TextBox</param>
         public void GenerateRandomPwdInTextBox(CheckBox cbxRandomPwd, GroupBox gbxPassword)
         {
             // Boucle qui vérifie si la case de la génération aléaoire du mot de passe est cochée
@@ -343,7 +397,7 @@ namespace NotePass.Model
                     if (control is TextBox)
                     {
                         TextBox textBox = control as TextBox;
-                        if(textBox.Tag != null && textBox.Tag.ToString() == "Password")
+                        if (textBox.Tag != null && textBox.Tag.ToString() == "Password")
                         {
                             textBox.Text = pwd;
                         }
@@ -352,15 +406,22 @@ namespace NotePass.Model
             }
         }
 
+        /// <summary>
+        /// Méthode qui permet de définir l'action a effectué sur le fichier XML
+        /// </summary>
+        /// <param name="key">Le mot de passe</param>
+        /// <param name="safe">Le coffre</param>
         public void ActionOnFileContent(string key, Safe safe)
         {
             xmlFile = new XmlFile(key, true);
             ActionOnFile(false, key, "writing", xmlFile.DataFilePath);
+            // Boucle qui vérifie si il y a une erreur lors du déchiffrement
             if (_error == null)
             {
                 foreach (Entry entry in safe.LstEntry)
                 {
                     int noIndex = safe.LstEntry.IndexOf(entry);
+                    // Boucle qui vérifie si l'identifiant de l'entrée se trouve dans la liste et que la liste n'est pas vide
                     if (safe.AddedInXmlFile != null && safe.AddedInXmlFile.Contains(noIndex))
                     {
                         xmlFile.InsertDataInFile(noIndex, entry.Name, entry.Password, entry.Username, entry.Url, entry.Date, Convert.ToBoolean(entry.Favorites));
@@ -370,9 +431,11 @@ namespace NotePass.Model
                     else if (safe.ModifiedInXmlFile != null && safe.ModifiedInXmlFile.Contains(noIndex))
                     {
                         xmlFile.UpdateDataInXml(noIndex, entry.Name, entry.Password, entry.Username, entry.Url, Convert.ToBoolean(entry.Favorites));
+                        // Boucle qui vérifie que le mot de passe de l'application n'a pas été modifié
                         if (key != entry.Password)
                         {
                             key = entry.Password;
+                            // Boucle qui vérifie que l'entrée n'est pas celle qui a été crée par défaut
                             if (noIndex == 0)
                             {
                                 ActionOnFile(false, _stringEncryptPwd, "writing", xmlFile.ForgottenpwdFilePath);
@@ -384,7 +447,7 @@ namespace NotePass.Model
                     }
                     else if (safe.DeletedInXmlFile != null && safe.DeletedInXmlFile.Contains(noIndex))
                     {
-                        xmlFile.DeleteDataInXmlFile(noIndex);
+                        DeleteDataInXmlFile(noIndex);
                         safe.LstEntry.RemoveAt(noIndex);
                         safe.DeletedInXmlFile.Clear();
                         break;
@@ -392,6 +455,38 @@ namespace NotePass.Model
                 }
                 ActionOnFile(true, key, "writing", xmlFile.DataFilePath);
             }
+        }
+
+        /// <summary>
+        /// Méthode qui permet de supprimer un fichier
+        /// </summary>
+        /// <param name="file">Le fichier rechercher</param>
+        private void IfCopyExist(string file)
+        {
+            // Boucle qui vérifie que le fichier existe
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+        }
+
+        /// <summary>
+        /// Méthode qui permet de supprimer les données dans le fichier XML
+        /// </summary>
+        /// <param name="index">L'idetifiant de l'entrée</param>
+        public void DeleteDataInXmlFile(int index)
+        {
+            XDocument xDocument;
+            xDocument = XDocument.Load(xmlFile.DataFilePath);
+            foreach (XElement parent in xDocument.Root.Elements("id"))
+            {
+                // Boucle qui cherche l'entrée selon l'identifiant
+                if ((int)parent.Attribute("no") == index)
+                {
+                    parent.Remove();
+                }
+            }
+            xDocument.Save(xmlFile.DataFilePath);
         }
     }
 }

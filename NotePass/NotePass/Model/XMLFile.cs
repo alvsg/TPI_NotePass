@@ -16,16 +16,33 @@ using System.Xml.Linq; //Directive ajouté manuellement
 
 namespace NotePass.Model
 {
-    class XmlFile
+    public class XmlFile
     {
-        private string usernameWindows, dirPath, fileDataXml, fileForgottenPwd, _dataFilePath, _forgottenpwdFilePath, _oldPassword;
+        #region Déclaration des varaibles
+
+        private string usernameWindows, _dirPath, fileDataXml, fileForgottenPwd, _dataFilePath, _forgottenpwdFilePath;
         private List<string> _lstAnswer;
         private Security secure;
         private XDocument xDocument;
 
+        #endregion
+
+        /// <summary>
+        /// Texte qui est le chemin du fichier Xml datafile.xml
+        /// </summary>
         public string DataFilePath { get => _dataFilePath; }
+        /// <summary>
+        /// Texte qui est le chemin du fichier xml forgottenpwd.xml
+        /// </summary>
         public string ForgottenpwdFilePath { get => _forgottenpwdFilePath; }
+        /// <summary>
+        /// Liste des réponses
+        /// </summary>
         public List<string> LstAnswer { get => _lstAnswer; set => _lstAnswer = value; }
+        /// <summary>
+        /// Texte qui est l'emplacement du projet
+        /// </summary>
+        public string DirPath { get => _dirPath; set => _dirPath = value; }
 
         /// <summary>
         /// Constructeur principal de la classe XmlFile
@@ -39,61 +56,33 @@ namespace NotePass.Model
             usernameWindows = Environment.UserName;
             fileDataXml = "datafile.xml";
             fileForgottenPwd = "forgottenpwd.xml";
-            dirPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + "/data/";
-            _dataFilePath = dirPath + fileDataXml;
-            _forgottenpwdFilePath = dirPath + fileForgottenPwd;
+            _dirPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + "/data/";
+            _dataFilePath = _dirPath + fileDataXml;
+            _forgottenpwdFilePath = _dirPath + fileForgottenPwd;
             _lstAnswer = new List<string>();
             secure = new Security(this);
         }
 
+        /// <summary>
+        /// Constructeur qui récupère le mot de passe et un booléen qui indique si le fichier forgottenpwd.xml est chiffré ou non
+        /// </summary>
+        /// <param name="passwordOf"></param>
+        /// <param name="isEncrypt"></param>
         public XmlFile(string passwordOf, bool isEncrypt) : this()
         {
+            // Boucle qui vérifie si le fichier est chiffré
             if (isEncrypt)
             {
                 secure.ActionOnFile(false, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
             }
+
             GetAllResponse(passwordOf);
+
+            // Boucle qui vérifie si le fichier est chiffré
             if (isEncrypt)
             {
                 secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
             }
-        }
-
-        /// <summary>
-        /// Méthode qui permet de vérifier si l'utilisateur ouvre la première fois l'application
-        ///     Si oui, le fichier xml est crée et le formulaire de création s'affiche 
-        /// </summary>
-        /// <param name="frmAuthentification">Le formulaire d'authentification</param>
-        public void VerifyIfFirstOpen(FrmAuthentification frmAuthentification)
-        {
-            bool exist = VerifyIfExist();
-            // Boucle qui vérifie que le résultat correct
-            if (!exist)
-            {
-                View.FrmRegistry frmRegistry = new View.FrmRegistry(false, null);
-                frmRegistry.ShowDialog();
-                frmAuthentification.Close();
-            }
-        }
-
-        /// <summary>
-        /// Méthode qui permet de vérifier si le fichier xml a déjà été crée
-        /// </summary>
-        /// <returns> Un booléen qui indiquera si les deux extistent (true) ou si ils n'existent pas (false) </returns>
-        private bool VerifyIfExist()
-        {
-            // Boucle qui vérifie si le dossier data n'existe pas
-            if (!Directory.Exists(dirPath))
-            {
-                Directory.CreateDirectory(dirPath);
-                return false;
-            }
-            // Boucle qui vérifie si le fichier XML n'existe pas
-            else if (!File.Exists(_dataFilePath + ".aes"))
-            {
-                return false;
-            }
-            return true;
         }
 
         /// <summary>
@@ -103,6 +92,7 @@ namespace NotePass.Model
         {
             string textInFile = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + Environment.NewLine + "<data>" + Environment.NewLine + "</data>";
             File.WriteAllText(_dataFilePath, textInFile);
+            // Boucle qui vérifie si le nom est celui de l'application
             if (name == "NotePass")
             {
                 username = usernameWindows;
@@ -111,18 +101,15 @@ namespace NotePass.Model
         }
 
         /// <summary>
-        /// Méthode qui permet de supprimer un fichier
+        /// Méthode qui permet d'insérer une nouvelle entrée dans le fichier datafile.xml
         /// </summary>
-        /// <param name="file">Le fichier rechercher</param>
-        public void IfCopyExist(string file)
-        {
-            // Boucle qui vérifie que le fichier existe
-            if (File.Exists(file))
-            {
-                File.Delete(file);
-            }
-        }
-
+        /// <param name="noIndex">L'identifiant</param>
+        /// <param name="nameOf">Le nom du site ou du logiciel</param>
+        /// <param name="passwordOf">Le mot de passe</param>
+        /// <param name="usernameOf">Le nom d'utilisateur</param>
+        /// <param name="urlOf">L'adresse web</param>
+        /// <param name="added">La date d'ajout</param>
+        /// <param name="isFavorites">Le booléen qui indique si l'entrée est en favoris</param>
         public void InsertDataInFile(int noIndex, string nameOf, string passwordOf, string usernameOf, string urlOf, DateTime added, bool isFavorites)
         {
             xDocument = XDocument.Load(_dataFilePath);
@@ -141,6 +128,13 @@ namespace NotePass.Model
             xDocument.Save(_dataFilePath);
         }
 
+        /// <summary>
+        /// Méthode qui permet de créer le fichier forgottenpwd.xml
+        /// </summary>
+        /// <param name="Question1">La première question</param>
+        /// <param name="Question2">La deuième question</param>
+        /// <param name="Question3">La troisième question</param>
+        /// <param name="password">Le mot de passe de l'application</param>
         public void CreateForgottenPwdXmlFile(int Question1, int Question2, int Question3, string password)
         {
             string passwordOfQ1 = secure.ActionOnString(true, password, _lstAnswer[0]);
@@ -154,9 +148,20 @@ namespace NotePass.Model
             string textInFile = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + Environment.NewLine + "<questions>" + Environment.NewLine + "</questions>";
             File.WriteAllText(_forgottenpwdFilePath, textInFile);
             InsertQuestionsInto(Question1, Question2, Question3, passwordOfQ1, passwordOfQ2, passwordOfQ3, responseOfQ1, responseOfQ2, responseOfQ3);
-            secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
         }
 
+        /// <summary>
+        /// Méthode qui permet d'insérer les données dans le fichier forgottenpwd.xml 
+        /// </summary>
+        /// <param name="Question1">La première question</param>
+        /// <param name="Question2">La deuième question</param>
+        /// <param name="Question3">La troisième question</param>
+        /// <param name="passwordOfQ1">Le mot de passe chiffré à l'aide de la réponse de la question 1</param>
+        /// <param name="passwordOfQ2">Le mot de passe chiffré à l'aide de la réponse de la question 2</param>
+        /// <param name="passwordOfQ3">Le mot de passe chiffré à l'aide de la réponse de la question 3</param>
+        /// <param name="responseOfQ1">La réponse de la question 1 chiffré avec le mot de passe</param>
+        /// <param name="responseOfQ2">La réponse de la question 2 chiffré avec le mot de passe</param>
+        /// <param name="responseOfQ3">La réponse de la question 3 chiffré avec le mot de passe</param>
         private void InsertQuestionsInto(int Question1, int Question2, int Question3, string passwordOfQ1, string passwordOfQ2, string passwordOfQ3, string responseOfQ1, string responseOfQ2, string responseOfQ3)
         {
             xDocument = XDocument.Load(_forgottenpwdFilePath);
@@ -185,47 +190,25 @@ namespace NotePass.Model
             xDocument.Save(_forgottenpwdFilePath);
         }
 
-        public List<int> GetIndexQuestions(List<string> answers)
-        {
-            List<int> question = new List<int>();
-
-            secure.ActionOnFile(false, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
-            xDocument = XDocument.Load(_forgottenpwdFilePath);
-            foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
-            {
-                if (element.Name == "question")
-                {
-                    question.Add(Convert.ToInt32(element.Attribute("id").Value));
-                }
-            }
-            secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
-
-            return question;
-        }
-
-        public List<Entry> GetDataInArray()
-        {
-            List<Entry> data = new List<Entry>();
-            DateTime dateTime;
-            xDocument = XDocument.Load(_dataFilePath);
-
-            // Boucle qui parcour les données dans le fichiers XML
-            foreach (XElement element in xDocument.Descendants("data").Nodes().ToList())
-            {
-                dateTime = DateTime.ParseExact(element.Element("date").Value, "MM:dd:yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture); //Yann heleped
-                data.Add(new Entry(element.Element("name").Value, element.Element("url").Value, element.Element("password").Value, element.Element("username").Value, dateTime, element.Element("favorites").Value));
-            }
-
-            return data;
-        }
-
+        /// <summary>
+        /// Méthode qui permet de mettre à jour les données dans le fichier datafile.xml
+        /// </summary>
+        /// <param name="noIndex">L'identifiant</param>
+        /// <param name="nameOf">Le nom du site ou du logiciel</param>
+        /// <param name="passwordOf">Le mot de passe</param>
+        /// <param name="usernameOf">Le nom d'utilisateur</param>
+        /// <param name="urlOf">L'adresse web</param>
+        /// <param name="added">La date d'ajout</param>
+        /// <param name="isFavorites">Le booléen qui indique si l'entrée est en favoris</param>
         public void UpdateDataInXml(int noIndex, string nameOf, string passwordOf, string usernameOf, string urlOf, bool isFavorites)
         {
             xDocument = XDocument.Load(_dataFilePath);
             foreach (XElement parent in xDocument.Root.Elements("id"))
             {
+                // Boucle qui vérifie si l'identifiant correspond
                 if ((int)parent.Attribute("no") == noIndex)
                 {
+                    // Boucle qui vérifie le nom de la balise
                     if ((string)parent.Element("name") != nameOf)
                     {
                         parent.Element("name").Value = nameOf;
@@ -251,68 +234,14 @@ namespace NotePass.Model
             xDocument.Save(_dataFilePath);
         }
 
-        public void DeleteDataInXmlFile(int index)
-        {
-            xDocument = XDocument.Load(_dataFilePath);
-            foreach (XElement parent in xDocument.Root.Elements("id"))
-            {
-                if ((int)parent.Attribute("no") == index)
-                {
-                    parent.Remove();
-                }
-            }
-            xDocument.Save(_dataFilePath);
-        }
-
-        public List<Entry> GetAllFavoritesData()
-        {
-            List<Entry> favorites = new List<Entry>();
-            DateTime dateTime;
-            xDocument = XDocument.Load(_dataFilePath);
-
-            // Boucle qui parcour les données dans le fichiers XML
-            foreach (XElement element in xDocument.Descendants("data").Nodes().ToList())
-            {
-                if (Convert.ToBoolean(element.Element("favorites").Value))
-                {
-                    dateTime = DateTime.ParseExact(element.Element("date").Value, "MM:dd:yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture); //Yann heleped
-                    favorites.Add(new Entry(element.Element("name").Value, element.Element("url").Value, element.Element("password").Value, element.Element("username").Value, dateTime, element.Element("favorites").Value));
-                }
-            }
-
-            return favorites;
-        }
-
-        public string VerifyIfResponseIfRight(int selectedQuestion, string response, ComboBox comboBox)
-        {
-            string password = "";
-            secure.ActionOnFile(false, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
-            List<int> lstSelectedQuestion = (List<int>)comboBox.Tag;
-            xDocument = XDocument.Load(_forgottenpwdFilePath);
-
-            foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
-            {
-                if (element.Name == "question")
-                {
-                    if (Convert.ToInt32(element.Attribute("id").Value) == lstSelectedQuestion[selectedQuestion])
-                    {
-                        password = secure.ActionOnString(false, element.Value, response);
-                        if (password != null)
-                        {
-                            secure.ActionOnFile(false, password, "writing", _dataFilePath);
-                            if (secure.Error == null)
-                            {
-                                return password;
-                            }
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
+        /// <summary>
+        /// Méthode qui permet de mettre à jour les données dans le fichier forgottenpwd.xml avec le nouveau mot de passe
+        /// </summary>
+        /// <param name="newPassword"></param>
+        /// <param name="answers"></param>
         public void UpdatePassword(string newPassword, List<string> answers)
         {
+            // Boucle qui vérifie si la réponse n'est pas null
             if (answers != null)
             {
                 _lstAnswer = answers;
@@ -339,11 +268,16 @@ namespace NotePass.Model
             secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", _forgottenpwdFilePath);
         }
 
+        /// <summary>
+        /// Méthode qui permet de récupérer les réponses des questions
+        /// </summary>
+        /// <param name="password"></param>
         private void GetAllResponse(string password)
         {
             xDocument = XDocument.Load(_forgottenpwdFilePath);
             foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
             {
+                // Boucle qui vérifie le nom de la balise
                 if (element.Name == "response")
                 {
                     string response = secure.ActionOnString(false, element.Value, password);
@@ -352,11 +286,16 @@ namespace NotePass.Model
             }
         }
 
+        /// <summary>
+        /// Méthode qui permet de récupérer les questions sélectioné
+        /// </summary>
+        /// <returns></returns>
         private List<int> GetSelectedQuestion()
         {
             List<int> idQuestion = new List<int>();
             foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
             {
+                // Boucle qui vérifie le nom de la balise
                 if (element.Name == "question")
                 {
                     idQuestion.Add(Convert.ToInt32(element.Attribute("id").Value));
@@ -365,6 +304,12 @@ namespace NotePass.Model
             return idQuestion;
         }
 
+        /// <summary>
+        /// Néthode qui permet de mettre à jour la valeur des balises dans le fichier forgottenpwd.xml
+        /// </summary>
+        /// <param name="element">La balise</param>
+        /// <param name="newPassword">Le nouveau mot de passe</param>
+        /// <param name="index">L'identifiant </param>
         private void UpdateData(XElement element, string newPassword, int index)
         {
             switch (element.Name.ToString())

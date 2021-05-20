@@ -211,6 +211,7 @@ namespace NotePass.View
                     xmlFile.LstAnswer.Add(tbxQuestion2Answer.Text);
                     xmlFile.LstAnswer.Add(tbxQuestion3Answer.Text);
                     xmlFile.CreateForgottenPwdXmlFile(cbxQuestion1.SelectedIndex, cbxQuestion2.SelectedIndex, cbxQuestion3.SelectedIndex, tbxPasswordConf.Text);
+                    secure.ActionOnFile(true, secure.StringEncryptPwd, "writing", xmlFile.ForgottenpwdFilePath);
                 }
                 CloseThis();
             }

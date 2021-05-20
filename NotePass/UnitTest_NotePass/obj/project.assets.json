@@ -5737,11 +5737,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ALVSGL\\Desktop\\TPI_NotePass\\NotePass\\UnitTest_NotePass\\UnitTest_NotePass.csproj",
+      "projectUniqueName": "C:\\Users\\ALVSGL\\Desktop\\NotePass\\NotePass\\UnitTest_NotePass\\UnitTest_NotePass.csproj",
       "projectName": "UnitTest_NotePass",
-      "projectPath": "C:\\Users\\ALVSGL\\Desktop\\TPI_NotePass\\NotePass\\UnitTest_NotePass\\UnitTest_NotePass.csproj",
+      "projectPath": "C:\\Users\\ALVSGL\\Desktop\\NotePass\\NotePass\\UnitTest_NotePass\\UnitTest_NotePass.csproj",
       "packagesPath": "C:\\Users\\ALVSGL\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ALVSGL\\Desktop\\TPI_NotePass\\NotePass\\UnitTest_NotePass\\obj\\",
+      "outputPath": "C:\\Users\\ALVSGL\\Desktop\\NotePass\\NotePass\\UnitTest_NotePass\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -5762,8 +5762,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\ALVSGL\\Desktop\\TPI_NotePass\\NotePass\\NotePass\\NotePass.csproj": {
-              "projectPath": "C:\\Users\\ALVSGL\\Desktop\\TPI_NotePass\\NotePass\\NotePass\\NotePass.csproj"
+            "C:\\Users\\ALVSGL\\Desktop\\NotePass\\NotePass\\NotePass\\NotePass.csproj": {
+              "projectPath": "C:\\Users\\ALVSGL\\Desktop\\NotePass\\NotePass\\NotePass\\NotePass.csproj"
             }
           }
         }

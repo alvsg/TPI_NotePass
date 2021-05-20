@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<data>
+  <id no="0">
+    <name>NotePass</name>
+    <password>Mot-de-passe-2021</password>
+    <username>ALVSGL</username>
+    <url></url>
+    <favorites>false</favorites>
+    <date>05:20:2021 16:43:54</date>
+  </id>
+  <id no="1">
+    <name>Snapchat</name>
+    <password>Ancien-mot-de-passe-2020</password>
+    <username>Nom d'utilisateur</username>
+    <url></url>
+    <favorites>true</favorites>
+    <date>05:20:2021 16:43:54</date>
+  </id>
+</data>

@@ -1,4 +1,11 @@
-﻿using NotePass.Model;
+﻿/*
+ * PROJET : NotePass - Gestionnaire de mot de passe
+ * AUTEUR : ALVES GUASTTI Letitia (I.FA-P3A)
+ * DESC.: Permet de gérer toute la partie sécurité de l'application
+ * VERSION : 04.05.2021 v.1
+ */
+
+using NotePass.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

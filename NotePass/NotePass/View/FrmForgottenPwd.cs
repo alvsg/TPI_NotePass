@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace NotePass.View
 {
@@ -121,7 +122,7 @@ namespace NotePass.View
         /// <param name="e"></param>
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            string itIsRight = xmlFile.VerifyIfResponseIfRight(cbxQuestion.SelectedIndex, tbxReply.Text, cbxQuestion);
+            string itIsRight = VerifyIfResponseIfRight(cbxQuestion.SelectedIndex, tbxReply.Text, cbxQuestion);
             // Boucle qui vérifie si le mot de passe a été déchiffré correctement
             if (itIsRight != null)
             {
@@ -137,6 +138,36 @@ namespace NotePass.View
                 pbxMessage.Visible = true;
                 lblMessage.Visible = true;
             }
+        }
+
+        private string VerifyIfResponseIfRight(int selectedQuestion, string response, ComboBox comboBox)
+        {
+            string password;
+            Model.Security secure = new Model.Security(xmlFile);
+            XDocument xDocument;
+            secure.ActionOnFile(false, secure.StringEncryptPwd, "writing", xmlFile.ForgottenpwdFilePath);
+            List<int> lstSelectedQuestion = (List<int>)comboBox.Tag;
+            xDocument = XDocument.Load(xmlFile.ForgottenpwdFilePath);
+
+            foreach (XElement element in xDocument.Descendants("questions").Nodes().ToList())
+            {
+                if (element.Name == "question")
+                {
+                    if (Convert.ToInt32(element.Attribute("id").Value) == lstSelectedQuestion[selectedQuestion])
+                    {
+                        password = secure.ActionOnString(false, element.Value, response);
+                        if (password != null)
+                        {
+                            secure.ActionOnFile(false, password, "writing", xmlFile.DataFilePath);
+                            if (secure.Error == null)
+                            {
+                                return password;
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
         }
     }
 }

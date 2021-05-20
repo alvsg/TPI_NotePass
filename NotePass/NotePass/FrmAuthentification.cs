@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,7 +51,44 @@ namespace NotePass
         /// <param name="e"></param>
         private void FrmAuthentification_Load(object sender, EventArgs e)
         {
-            xmlFile.VerifyIfFirstOpen(this);
+            VerifyIfFirstOpen(this);
+        }
+
+        /// <summary>
+        /// Méthode qui permet de vérifier si l'utilisateur ouvre la première fois l'application
+        ///     Si oui, le fichier xml est crée et le formulaire de création s'affiche 
+        /// </summary>
+        /// <param name="frmAuthentification">Le formulaire d'authentification</param>
+        private void VerifyIfFirstOpen(FrmAuthentification frmAuthentification)
+        {
+            bool exist = VerifyIfExist();
+            // Boucle qui vérifie que le résultat correct
+            if (!exist)
+            {
+                View.FrmRegistry frmRegistry = new View.FrmRegistry(false, null);
+                frmRegistry.ShowDialog();
+                frmAuthentification.Close();
+            }
+        }
+
+        /// <summary>
+        /// Méthode qui permet de vérifier si le fichier xml a déjà été crée
+        /// </summary>
+        /// <returns> Un booléen qui indiquera si les deux extistent (true) ou si ils n'existent pas (false) </returns>
+        private bool VerifyIfExist()
+        {
+            // Boucle qui vérifie si le dossier data n'existe pas
+            if (!Directory.Exists(xmlFile.DirPath))
+            {
+                Directory.CreateDirectory(xmlFile.DirPath);
+                return false;
+            }
+            // Boucle qui vérifie si le fichier XML n'existe pas
+            else if (!File.Exists(xmlFile.DataFilePath + ".aes"))
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
